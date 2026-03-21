@@ -1,1248 +1,1645 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IPTV Command Center</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #070b12;
-  --s1: #0d1320;
-  --s2: #111929;
-  --s3: #161f35;
-  --border: #1c2640;
-  --border2: #243050;
-  --cyan: #00f5d4;
-  --blue: #3b8bff;
-  --orange: #ff8c42;
-  --red: #ff3e5e;
-  --yellow: #ffd166;
-  --green: #06d6a0;
-  --purple: #8b5cf6;
-  --text: #dde4f0;
-  --muted: #4a5878;
-  --muted2: #6b7a9a;
-  --font: 'Barlow Condensed', sans-serif;
-  --mono: 'IBM Plex Mono', monospace;
-}
-
-- { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-background: var(–bg);
-color: var(–text);
-font-family: var(–font);
-min-height: 100vh;
-overflow-x: hidden;
-}
-
-/* Scanline texture */
-body::after {
-content:’’;
-position:fixed; inset:0;
-background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
-pointer-events:none; z-index:999;
-}
-
-/* Grid bg */
-body::before {
-content:’’;
-position:fixed; inset:0;
-background-image:
-linear-gradient(rgba(0,245,212,0.025) 1px, transparent 1px),
-linear-gradient(90deg, rgba(0,245,212,0.025) 1px, transparent 1px);
-background-size: 50px 50px;
-pointer-events:none; z-index:0;
-}
-
-.app { position:relative; z-index:1; display:flex; flex-direction:column; min-height:100vh; }
-
-/* ── TOPBAR ────────────────────────────────────── */
-.topbar {
-display:flex; align-items:center; justify-content:space-between;
-padding: 0 24px;
-height: 56px;
-background: var(–s1);
-border-bottom: 1px solid var(–border);
-position:sticky; top:0; z-index:50;
-}
-
-.brand {
-display:flex; align-items:center; gap:12px;
-}
-
-.brand-mark {
-width:32px; height:32px;
-background: linear-gradient(135deg, var(–cyan), var(–blue));
-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-display:flex; align-items:center; justify-content:center;
-box-shadow: 0 0 20px rgba(0,245,212,0.4);
-}
-
-.brand-name {
-font-size: 20px; font-weight: 900; letter-spacing: 2px;
-text-transform: uppercase;
-background: linear-gradient(90deg, var(–cyan), var(–blue));
--webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-
-.topbar-right { display:flex; align-items:center; gap:16px; }
-
-.status-pill {
-display:flex; align-items:center; gap:6px;
-background: rgba(6,214,160,0.1);
-border: 1px solid rgba(6,214,160,0.25);
-border-radius:20px; padding:4px 12px;
-font-family: var(–mono); font-size:11px; color: var(–green);
-}
-
-.pulse { width:6px; height:6px; background:var(–green); border-radius:50%;
-box-shadow:0 0 8px var(–green); animation: blink 2s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-#topbar-clock { font-family:var(–mono); font-size:13px; color:var(–muted2); }
-
-/* ── TABS ──────────────────────────────────────── */
-.tabs {
-display:flex; gap:0;
-background: var(–s1);
-border-bottom: 1px solid var(–border);
-padding: 0 24px;
-overflow-x: auto;
-}
-
-.tab {
-padding: 12px 20px;
-font-size:14px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
-color: var(–muted2);
-border: none; background:transparent; cursor:pointer;
-border-bottom: 2px solid transparent;
-white-space: nowrap;
-transition: all 0.2s;
-}
-
-.tab.active { color: var(–cyan); border-bottom-color: var(–cyan); }
-.tab:hover:not(.active) { color: var(–text); }
-
-/* ── VIEWS ─────────────────────────────────────── */
-.view { display:none; padding:24px; }
-.view.active { display:block; }
-
-/* ── STAT CARDS ────────────────────────────────── */
-.stats-row {
-display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:24px;
-}
-
-.stat {
-background:var(–s1); border:1px solid var(–border); border-radius:10px;
-padding:16px 18px; position:relative; overflow:hidden;
-}
-
-.stat-glow {
-position:absolute; top:-20px; right:-20px; width:80px; height:80px;
-border-radius:50%; opacity:0.12; filter:blur(20px);
-}
-
-.stat-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(–muted); margin-bottom:6px; }
-.stat-val { font-size:36px; font-weight:900; line-height:1; }
-.stat-sub { font-size:11px; color:var(–muted2); margin-top:4px; font-family:var(–mono); }
-
-/* ── PANEL CARDS ───────────────────────────────── */
-.panels-row { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px; }
-
-.panel-card {
-background:var(–s1); border:1px solid var(–border); border-radius:12px;
-overflow:hidden; transition: all 0.2s;
-}
-
-.panel-card:hover { border-color:var(–border2); transform:translateY(-2px); }
-
-.panel-head {
-padding:14px 18px; display:flex; align-items:center; justify-content:space-between;
-border-bottom:1px solid var(–border);
-}
-
-.panel-title { display:flex; align-items:center; gap:10px; }
-.panel-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-.panel-name { font-size:16px; font-weight:800; letter-spacing:0.5px; }
-.panel-type { font-size:11px; color:var(–muted); font-family:var(–mono); }
-
-.panel-open-btn {
-background:rgba(255,255,255,0.05); border:1px solid var(–border2);
-border-radius:6px; padding:5px 12px;
-font-family:var(–font); font-size:12px; font-weight:700; color:var(–text);
-cursor:pointer; text-decoration:none; display:inline-block;
-transition:all 0.2s;
-}
-.panel-open-btn:hover { background:rgba(0,245,212,0.1); border-color:var(–cyan); color:var(–cyan); }
-
-.panel-body { padding:14px 18px; }
-.panel-stats { display:flex; gap:20px; }
-.ps { text-align:center; }
-.ps-val { font-size:24px; font-weight:900; }
-.ps-lbl { font-size:10px; color:var(–muted); text-transform:uppercase; letter-spacing:1px; }
-
-.panel-body-manual {
-padding:14px 18px; font-size:12px; color:var(–muted2);
-font-family:var(–mono); line-height:1.6;
-}
-
-.sync-btn {
-display:flex; align-items:center; gap:6px;
-background:rgba(59,139,255,0.1); border:1px solid rgba(59,139,255,0.3);
-border-radius:6px; padding:5px 12px;
-font-family:var(–font); font-size:12px; font-weight:700; color:var(–blue);
-cursor:pointer; transition:all 0.2s; white-space:nowrap;
-}
-.sync-btn:hover { background:rgba(59,139,255,0.2); }
-.sync-btn.syncing { opacity:0.6; pointer-events:none; }
-.spin { animation:spin 1s linear infinite; display:inline-block; }
-@keyframes spin { to{transform:rotate(360deg)} }
-
-/* ── CREDENTIALS SETUP ─────────────────────────── */
-.cred-card {
-background:var(–s1); border:1px solid var(–border); border-radius:12px;
-padding:20px; margin-bottom:14px;
-}
-
-.cred-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
-.cred-title { font-size:16px; font-weight:800; display:flex; align-items:center; gap:8px; }
-.cred-saved { font-family:var(–mono); font-size:11px; color:var(–green); }
-.cred-unsaved { font-family:var(–mono); font-size:11px; color:var(–muted2); }
-
-.cred-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.cred-grid3 { display:grid; grid-template-columns:2fr 1fr 1fr; gap:12px; }
-
-.fg { display:flex; flex-direction:column; gap:4px; }
-.fl { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(–muted); }
-
-.fi {
-background:var(–bg); border:1px solid var(–border); border-radius:7px;
-padding:9px 12px; font-family:var(–mono); font-size:13px; color:var(–text);
-outline:none; transition:border-color 0.2s; width:100%;
-}
-.fi:focus { border-color:var(–cyan); }
-
-.save-cred-btn {
-background: linear-gradient(135deg, var(–cyan), var(–blue));
-border:none; border-radius:7px; padding:9px 20px;
-font-family:var(–font); font-size:13px; font-weight:800; color:var(–bg);
-cursor:pointer; transition:opacity 0.2s; margin-top:12px;
-}
-.save-cred-btn:hover { opacity:0.85; }
-
-/* ── CUSTOMERS TABLE ───────────────────────────── */
-.table-card {
-background:var(–s1); border:1px solid var(–border); border-radius:12px;
-overflow:hidden;
-}
-
-.table-topbar {
-padding:14px 20px; border-bottom:1px solid var(–border);
-display:flex; align-items:center; justify-content:space-between;
-}
-
-.table-title { font-size:16px; font-weight:800; }
-
-.add-btn {
-background:var(–cyan); border:none; border-radius:7px; padding:7px 16px;
-font-family:var(–font); font-size:13px; font-weight:800; color:var(–bg);
-cursor:pointer; transition:all 0.2s;
-}
-.add-btn:hover { box-shadow:0 0 20px rgba(0,245,212,0.4); }
-
-.filter-bar {
-padding:12px 20px; border-bottom:1px solid var(–border);
-display:flex; align-items:center; gap:10px;
-}
-
-.search-input {
-background:var(–bg); border:1px solid var(–border); border-radius:7px;
-padding:7px 12px; font-family:var(–mono); font-size:12px; color:var(–text);
-outline:none; width:220px; transition:border-color 0.2s;
-}
-.search-input:focus { border-color:var(–cyan); }
-
-.filter-sel {
-background:var(–bg); border:1px solid var(–border); border-radius:7px;
-padding:7px 12px; font-family:var(–font); font-size:12px; color:var(–text);
-outline:none; cursor:pointer;
-}
-
-table { width:100%; border-collapse:collapse; }
-thead th {
-padding:9px 18px; text-align:left;
-font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
-color:var(–muted); background:var(–s2);
-}
-tbody tr { border-top:1px solid var(–border); transition:background 0.15s; }
-tbody tr:hover { background:var(–s2); }
-tbody td { padding:12px 18px; font-size:13px; }
-
-.badge {
-display:inline-flex; align-items:center; gap:4px;
-padding:3px 9px; border-radius:4px;
-font-size:11px; font-weight:700; letter-spacing:0.5px;
-font-family:var(–mono);
-}
-.bd { width:5px; height:5px; border-radius:50%; }
-.b-green { background:rgba(6,214,160,0.12); color:var(–green); }
-.b-green .bd { background:var(–green); }
-.b-yellow { background:rgba(255,209,102,0.12); color:var(–yellow); }
-.b-yellow .bd { background:var(–yellow); }
-.b-red { background:rgba(255,62,94,0.12); color:var(–red); }
-.b-red .bd { background:var(–red); }
-.b-blue { background:rgba(59,139,255,0.12); color:var(–blue); }
-.b-blue .bd { background:var(–blue); }
-
-.act-btns { display:flex; gap:5px; }
-.btn-xs {
-background:var(–s2); border:1px solid var(–border); border-radius:5px;
-padding:4px 9px; font-size:11px; font-family:var(–font); font-weight:700;
-color:var(–text); cursor:pointer; transition:all 0.15s;
-}
-.btn-xs:hover { border-color:var(–cyan); color:var(–cyan); }
-.btn-xs.danger:hover { border-color:var(–red); color:var(–red); }
-
-/* ── ALERTS VIEW ───────────────────────────────── */
-.alerts-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-
-.alert-card {
-background:var(–s1); border:1px solid var(–border); border-radius:10px;
-padding:16px 18px; display:flex; align-items:center; gap:14px;
-transition:all 0.2s;
-}
-.alert-card.urgent { border-color:rgba(255,62,94,0.4); background:rgba(255,62,94,0.04); }
-.alert-card.warn { border-color:rgba(255,209,102,0.3); background:rgba(255,209,102,0.03); }
-
-.alert-ava {
-width:44px; height:44px; border-radius:10px; flex-shrink:0;
-display:flex; align-items:center; justify-content:center;
-font-size:16px; font-weight:900;
-}
-.ava-red { background:rgba(255,62,94,0.2); color:var(–red); }
-.ava-yellow { background:rgba(255,209,102,0.2); color:var(–yellow); }
-
-.alert-info { flex:1; min-width:0; }
-.alert-name { font-size:15px; font-weight:800; }
-.alert-meta { font-size:11px; color:var(–muted2); font-family:var(–mono); margin-top:2px; }
-.alert-panel { font-size:11px; color:var(–muted); }
-
-.copy-msg-btn {
-background:transparent; border:1px solid var(–border); border-radius:6px;
-padding:6px 10px; font-size:14px; cursor:pointer;
-transition:all 0.15s; flex-shrink:0;
-}
-.copy-msg-btn:hover { border-color:var(–cyan); background:rgba(0,245,212,0.08); }
-
-/* ── MODAL ─────────────────────────────────────── */
-.overlay {
-position:fixed; inset:0; background:rgba(0,0,0,0.85);
-backdrop-filter:blur(6px); z-index:200;
-display:flex; align-items:center; justify-content:center;
-opacity:0; pointer-events:none; transition:opacity 0.2s;
-}
-.overlay.on { opacity:1; pointer-events:all; }
-
-.modal {
-background:var(–s1); border:1px solid var(–border2);
-border-radius:14px; padding:26px; width:460px; max-width:90vw;
-transform:translateY(24px); transition:transform 0.2s;
-max-height:90vh; overflow-y:auto;
-}
-.overlay.on .modal { transform:translateY(0); }
-
-.modal h3 { font-size:20px; font-weight:900; margin-bottom:20px; letter-spacing:0.5px; }
-.mfg { margin-bottom:14px; }
-.mfl { display:block; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(–muted); margin-bottom:5px; }
-.mfi {
-width:100%; background:var(–bg); border:1px solid var(–border); border-radius:7px;
-padding:9px 13px; font-family:var(–mono); font-size:13px; color:var(–text);
-outline:none; transition:border-color 0.2s;
-}
-.mfi:focus { border-color:var(–cyan); }
-.mrow { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.modal-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; }
-
-.btn-cancel {
-background:transparent; border:1px solid var(–border); border-radius:7px;
-padding:9px 20px; font-family:var(–font); font-size:13px; font-weight:700;
-color:var(–muted2); cursor:pointer; transition:all 0.2s;
-}
-.btn-cancel:hover { color:var(–text); border-color:var(–muted2); }
-
-.btn-primary {
-background:var(–cyan); border:none; border-radius:7px; padding:9px 24px;
-font-family:var(–font); font-size:13px; font-weight:900; color:var(–bg);
-cursor:pointer; transition:all 0.2s; letter-spacing:0.5px;
-}
-.btn-primary:hover { box-shadow:0 0 20px rgba(0,245,212,0.4); }
-
-/* ── SYNC RESULTS ──────────────────────────────── */
-.sync-results {
-background:var(–bg); border:1px solid var(–border); border-radius:8px;
-margin-top:14px; max-height:260px; overflow-y:auto;
-}
-
-.sync-line {
-padding:10px 14px; border-bottom:1px solid var(–border);
-display:flex; align-items:center; gap:12px; font-size:12px;
-}
-.sync-line:last-child { border-bottom:none; }
-
-.sl-user { font-family:var(–mono); color:var(–blue); flex:1; }
-.sl-exp { font-family:var(–mono); font-size:11px; }
-.sl-exp.ok { color:var(–green); }
-.sl-exp.soon { color:var(–yellow); }
-.sl-exp.over { color:var(–red); }
-
-.link-btn {
-background:rgba(139,92,246,0.15); border:1px solid rgba(139,92,246,0.3);
-border-radius:5px; padding:3px 9px;
-font-family:var(–font); font-size:11px; font-weight:700; color:var(–purple);
-cursor:pointer; white-space:nowrap; transition:all 0.15s;
-}
-.link-btn:hover { background:rgba(139,92,246,0.25); }
-.link-btn.linked { background:rgba(6,214,160,0.12); border-color:rgba(6,214,160,0.3); color:var(–green); }
-
-/* ── SECTION LABEL ─────────────────────────────── */
-.sec-label {
-font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
-color:var(–muted); margin-bottom:14px; margin-top:24px;
-display:flex; align-items:center; gap:10px;
-}
-.sec-label::after { content:’’; flex:1; height:1px; background:var(–border); }
-
-.empty-state {
-padding:40px; text-align:center; color:var(–muted); font-size:14px;
-}
-
-/* ── RESPONSIVE ────────────────────────────────── */
-@media(max-width:900px) {
-.stats-row { grid-template-columns:repeat(3,1fr); }
-.panels-row { grid-template-columns:1fr; }
-.alerts-grid { grid-template-columns:1fr; }
-.cred-grid3 { grid-template-columns:1fr 1fr; }
-}
-@media(max-width:600px) {
-.stats-row { grid-template-columns:repeat(2,1fr); }
-.view { padding:14px; }
-.topbar { padding:0 14px; }
-}
-
-/* ── HA INFO BOX ───────────────────────────────── */
-.info-box {
-background:rgba(59,139,255,0.07); border:1px solid rgba(59,139,255,0.2);
-border-radius:10px; padding:16px 18px; margin-bottom:20px;
-font-size:13px; line-height:1.7; color:var(–muted2);
-}
-.info-box strong { color:var(–blue); }
-.info-box code {
-background:var(–bg); border:1px solid var(–border);
-border-radius:5px; padding:2px 7px;
-font-family:var(–mono); font-size:12px; color:var(–cyan);
-}
-</style>
-
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  />
+  <title>IPTV Command Center</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: #050e08;
+      --bg2: #071410;
+      --card: #081a10;
+      --card2: #0a2018;
+      --border: #0d3820;
+      --glow: #00ff88;
+      --glow2: #00cc66;
+      --glow3: #00ffcc;
+      --cyan: #00e5cc;
+      --red: #ff2244;
+      --yellow: #ffcc00;
+      --orange: #ff8800;
+      --blue: #0088ff;
+      --purple: #aa44ff;
+      --text: #ccffe0;
+      --muted: #2a6640;
+      --muted2: #3d8a55;
+      --font: 'Orbitron', monospace;
+      --body: 'Rajdhani', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 255, 136, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 136, 0.04) 1px, transparent 1px);
+      background-size: 30px 30px;
+      animation: gridmove 20s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes gridmove {
+      to {
+        background-position: 30px 30px;
+      }
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0, 0, 0, 0.08) 3px,
+        rgba(0, 0, 0, 0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 12px;
+    }
+
+    /* BRACKET CORNERS */
+    .brk {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+
+    .brk::before,
+    .brk::after,
+    .brk > .c1,
+    .brk > .c2 {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-color: var(--glow);
+      border-style: solid;
+      z-index: 2;
+    }
+
+    .brk::before {
+      top: -1px;
+      left: -1px;
+      border-width: 2px 0 0 2px;
+    }
+
+    .brk::after {
+      top: -1px;
+      right: -1px;
+      border-width: 2px 2px 0 0;
+    }
+
+    .brk > .c1 {
+      bottom: -1px;
+      left: -1px;
+      border-width: 0 0 2px 2px;
+    }
+
+    .brk > .c2 {
+      bottom: -1px;
+      right: -1px;
+      border-width: 0 2px 2px 0;
+    }
+
+    /* HEADER */
+    .hdr {
+      background: var(--card);
+      padding: 16px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .hdr-eye {
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: var(--muted2);
+      font-family: var(--font);
+      margin-bottom: 6px;
+    }
+
+    .hdr-title {
+      font-family: var(--font);
+      font-size: clamp(18px, 6vw, 26px);
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: var(--glow);
+      text-shadow:
+        0 0 20px rgba(0, 255, 136, 0.8),
+        0 0 40px rgba(0, 255, 136, 0.4);
+      text-transform: uppercase;
+    }
+
+    .hdr-sub {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--muted2);
+      font-family: var(--font);
+      margin-top: 4px;
+    }
+
+    .hdr-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .hs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--muted2);
+      font-family: var(--font);
+    }
+
+    .hdot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--glow);
+      box-shadow: 0 0 8px var(--glow);
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%,
+      100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    #clk {
+      font-family: var(--font);
+      font-size: 12px;
+      color: var(--glow);
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .tb {
+      flex: 1;
+      padding: 11px 2px;
+      background: transparent;
+      border: none;
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted2);
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .tb.on {
+      color: var(--glow);
+      background: rgba(0, 255, 136, 0.06);
+    }
+
+    .tb.on::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--glow);
+      box-shadow: 0 0 8px var(--glow);
+    }
+
+    .tbadge {
+      display: none;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: var(--red);
+      color: #fff;
+      font-size: 8px;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font);
+    }
+
+    /* STAT GRID */
+    .sgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .sc {
+      background: var(--card);
+      padding: 14px;
+      text-align: center;
+    }
+
+    .sl {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted2);
+      font-family: var(--font);
+      margin-bottom: 4px;
+    }
+
+    .sv {
+      font-family: var(--font);
+      font-size: clamp(26px, 8vw, 34px);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .cg {
+      color: var(--glow);
+      text-shadow: 0 0 16px rgba(0, 255, 136, 0.7);
+    }
+
+    .cr {
+      color: var(--red);
+      text-shadow: 0 0 16px rgba(255, 34, 68, 0.7);
+    }
+
+    .cy {
+      color: var(--yellow);
+      text-shadow: 0 0 16px rgba(255, 204, 0, 0.7);
+    }
+
+    .cc {
+      color: var(--cyan);
+      text-shadow: 0 0 16px rgba(0, 229, 204, 0.7);
+    }
+
+    /* SECTION */
+    .sec {
+      font-family: var(--font);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin: 14px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sec::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* PANEL BUTTONS */
+    .pgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .pb {
+      background: var(--card);
+      border: none;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .pb::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--pc, var(--glow));
+      box-shadow: 0 0 12px var(--pc, var(--glow));
+    }
+
+    .pb:active {
+      transform: scale(0.97);
+    }
+
+    .pi {
+      font-size: 20px;
+    }
+
+    .pn {
+      font-family: var(--font);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    .pt {
+      font-size: 10px;
+      color: var(--muted2);
+    }
+
+    .pa {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ALERT CARDS */
+    .alist {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .ac {
+      background: var(--card);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ac::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+    }
+
+    .ac.urg::before {
+      background: var(--red);
+      box-shadow: 0 0 10px var(--red);
+    }
+
+    .ac.wrn::before {
+      background: var(--yellow);
+      box-shadow: 0 0 10px var(--yellow);
+    }
+
+    .ac.sn::before {
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    .aava {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .ar {
+      background: rgba(255, 34, 68, 0.15);
+      color: var(--red);
+      border: 1px solid rgba(255, 34, 68, 0.3);
+    }
+
+    .ay {
+      background: rgba(255, 204, 0, 0.15);
+      color: var(--yellow);
+      border: 1px solid rgba(255, 204, 0, 0.3);
+    }
+
+    .ainf {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .an {
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .am {
+      font-size: 12px;
+      color: var(--muted2);
+      margin-top: 2px;
+    }
+
+    .nb {
+      background: rgba(0, 255, 136, 0.08);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .nb:active {
+      background: rgba(0, 255, 136, 0.2);
+    }
+
+    /* CUSTOMER CARDS */
+    .clist {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cc2 {
+      background: var(--card);
+      padding: 14px 14px 14px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cc2::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+    }
+
+    .cc2.sg::before {
+      background: var(--glow);
+      box-shadow: 0 0 8px var(--glow);
+    }
+
+    .cc2.sy::before {
+      background: var(--yellow);
+      box-shadow: 0 0 8px var(--yellow);
+    }
+
+    .cc2.sr::before {
+      background: var(--red);
+      box-shadow: 0 0 8px var(--red);
+    }
+
+    .ctop {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .cname {
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .cbadge {
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 3px 7px;
+      border-radius: 3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .bg {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--glow);
+      border: 1px solid rgba(0, 255, 136, 0.25);
+    }
+
+    .by {
+      background: rgba(255, 204, 0, 0.1);
+      color: var(--yellow);
+      border: 1px solid rgba(255, 204, 0, 0.25);
+    }
+
+    .bred {
+      background: rgba(255, 34, 68, 0.1);
+      color: var(--red);
+      border: 1px solid rgba(255, 34, 68, 0.25);
+    }
+
+    .cmeta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .cm {
+      font-size: 11px;
+      color: var(--muted2);
+    }
+
+    .cprice {
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--glow);
+    }
+
+    .cacts {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .ca {
+      flex: 1;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 9px 4px;
+      font-family: var(--font);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .ca:active {
+      opacity: 0.7;
+    }
+
+    .ca.ren {
+      border-color: rgba(0, 255, 136, 0.3);
+      color: var(--glow);
+    }
+
+    .ca.msg {
+      border-color: rgba(0, 229, 204, 0.3);
+      color: var(--cyan);
+    }
+
+    .ca.del {
+      border-color: rgba(255, 34, 68, 0.2);
+      color: var(--red);
+    }
+
+    /* FAB */
+    .fab {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      z-index: 50;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--glow), var(--cyan));
+      border: none;
+      cursor: pointer;
+      font-size: 28px;
+      color: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+      animation: fabp 3s ease-in-out infinite;
+      transition: transform 0.2s;
+    }
+
+    @keyframes fabp {
+      0%,
+      100% {
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(0, 255, 136, 0.9);
+      }
+    }
+
+    .fab:active {
+      transform: scale(0.92);
+    }
+
+    /* OVERLAY/DRAWER */
+    .ov {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .ov.on {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .drw {
+      width: 100%;
+      background: var(--card);
+      border-top: 2px solid var(--glow);
+      box-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
+      padding: 20px 16px 44px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    .ov.on .drw {
+      transform: translateY(0);
+    }
+
+    .dtitle {
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: var(--glow);
+      text-shadow: 0 0 16px rgba(0, 255, 136, 0.6);
+      margin-bottom: 20px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .fg {
+      margin-bottom: 13px;
+    }
+
+    .fl {
+      display: block;
+      font-family: var(--font);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 5px;
+    }
+
+    .fi {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 12px 13px;
+      font-family: var(--body);
+      font-size: 16px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .fi:focus {
+      border-color: var(--glow);
+      box-shadow: 0 0 12px rgba(0, 255, 136, 0.12);
+    }
+
+    .frow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .dacts {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .db {
+      flex: 1;
+      padding: 14px;
+      border-radius: 3px;
+      font-family: var(--font);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .db.p {
+      background: linear-gradient(135deg, var(--glow), var(--cyan));
+      color: var(--bg);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    }
+
+    .db.s {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted2);
+    }
+
+    /* SEARCH */
+    .srchwrap {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .srchicon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .srchi {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 12px 12px 12px 36px;
+      font-family: var(--body);
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+    }
+
+    .srchi:focus {
+      border-color: var(--glow);
+    }
+
+    /* PILLS */
+    .pills {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .pill {
+      padding: 6px 12px;
+      border-radius: 3px;
+      white-space: nowrap;
+      font-family: var(--font);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted2);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .pill.on {
+      background: rgba(0, 255, 136, 0.1);
+      border-color: var(--glow);
+      color: var(--glow);
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 96px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--card);
+      border: 1px solid var(--glow);
+      border-radius: 3px;
+      padding: 10px 18px;
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--glow);
+      box-shadow: 0 0 24px rgba(0, 255, 136, 0.3);
+      z-index: 200;
+      opacity: 0;
+      transition: all 0.3s;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .toast.on {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* EMPTY */
+    .empty {
+      text-align: center;
+      padding: 36px 16px;
+      font-family: var(--font);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted2);
+      line-height: 2.2;
+    }
+
+    .ei {
+      font-size: 36px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .bpad {
+      height: 80px;
+    }
+  </style>
 </head>
 <body>
-<div class="app">
-
-<!-- TOPBAR -->
-
-<div class="topbar">
-  <div class="brand">
-    <div class="brand-mark"></div>
-    <div class="brand-name">IPTV OPS</div>
-  </div>
-  <div class="topbar-right">
-    <div class="status-pill"><div class="pulse"></div>LIVE</div>
-    <div id="topbar-clock"></div>
-  </div>
-</div>
-
-<!-- TABS -->
-
-<div class="tabs">
-  <button class="tab active" onclick="switchTab('overview')">📊 Overview</button>
-  <button class="tab" onclick="switchTab('customers')">👥 Customers</button>
-  <button class="tab" onclick="switchTab('alerts')">🔔 Alerts</button>
-  <button class="tab" onclick="switchTab('panels')">🖥 Panels & Sync</button>
-  <button class="tab" onclick="switchTab('settings')">⚙️ Settings</button>
-</div>
-
-<!-- ══════════════════════════════════════════════ -->
-
-<!-- VIEW: OVERVIEW -->
-
-<!-- ══════════════════════════════════════════════ -->
-
-<div class="view active" id="view-overview">
-
-  <!-- STATS -->
-
-  <div class="stats-row">
-    <div class="stat">
-      <div class="stat-glow" style="background:var(--cyan)"></div>
-      <div class="stat-label">Total Customers</div>
-      <div class="stat-val" id="ov-total" style="color:var(--cyan)">0</div>
-    </div>
-    <div class="stat">
-      <div class="stat-glow" style="background:var(--red)"></div>
-      <div class="stat-label">Overdue</div>
-      <div class="stat-val" id="ov-over" style="color:var(--red)">0</div>
-    </div>
-    <div class="stat">
-      <div class="stat-glow" style="background:var(--yellow)"></div>
-      <div class="stat-label">Due This Week</div>
-      <div class="stat-val" id="ov-week" style="color:var(--yellow)">0</div>
-    </div>
-    <div class="stat">
-      <div class="stat-glow" style="background:var(--green)"></div>
-      <div class="stat-label">Monthly Revenue</div>
-      <div class="stat-val" id="ov-rev" style="color:var(--green); font-size:28px">$0</div>
-    </div>
-    <div class="stat">
-      <div class="stat-glow" style="background:var(--blue)"></div>
-      <div class="stat-label">Active Lines</div>
-      <div class="stat-val" id="ov-lines" style="color:var(--blue)">—</div>
-      <div class="stat-sub">across all panels</div>
-    </div>
-  </div>
-
-  <!-- PANEL CARDS -->
-
-  <div class="sec-label">🖥 Your Panels</div>
-  <div class="panels-row" id="overview-panels"></div>
-
-  <!-- UPCOMING BILLS -->
-
-  <div class="sec-label">📅 Upcoming Bills (Next 7 Days)</div>
-  <div class="table-card">
-    <table>
-      <thead><tr>
-        <th>Customer</th><th>Panel</th><th>Amount</th><th>Due Date</th><th>Status</th><th>Action</th>
-      </tr></thead>
-      <tbody id="upcoming-tbody"></tbody>
-    </table>
-  </div>
-
-</div>
-
-<!-- ══════════════════════════════════════════════ -->
-
-<!-- VIEW: CUSTOMERS -->
-
-<!-- ══════════════════════════════════════════════ -->
-
-<div class="view" id="view-customers">
-  <div class="table-card">
-    <div class="table-topbar">
-      <div class="table-title">All Customers</div>
-      <button class="add-btn" onclick="openAddCustomer()">+ Add Customer</button>
-    </div>
-    <div class="filter-bar">
-      <input class="search-input" id="cust-search" placeholder="🔍  Search name, username..." oninput="renderCustomers()">
-      <select class="filter-sel" id="cust-filter" onchange="renderCustomers()">
-        <option value="">All Status</option>
-        <option value="overdue">Overdue</option>
-        <option value="week">Due This Week</option>
-        <option value="ok">Good Standing</option>
-      </select>
-      <select class="filter-sel" id="cust-panel-filter" onchange="renderCustomers()">
-        <option value="">All Panels</option>
-      </select>
-    </div>
-    <table>
-      <thead><tr>
-        <th>Name</th><th>Line/User</th><th>Package</th><th>$/mo</th>
-        <th>Next Bill</th><th>Status</th><th>Panel</th><th>Actions</th>
-      </tr></thead>
-      <tbody id="cust-tbody"></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════ -->
-
-<!-- VIEW: ALERTS -->
-
-<!-- ══════════════════════════════════════════════ -->
-
-<div class="view" id="view-alerts">
-  <div id="alerts-overdue-label" class="sec-label" style="color:var(--red)">🔴 Overdue</div>
-  <div class="alerts-grid" id="alerts-overdue"></div>
-  <div id="alerts-week-label" class="sec-label" style="color:var(--yellow)">🟡 Due Within 7 Days</div>
-  <div class="alerts-grid" id="alerts-week"></div>
-  <div id="alerts-empty" class="empty-state" style="display:none">🎉 No bills due soon — you're all caught up!</div>
-</div>
-
-<!-- ══════════════════════════════════════════════ -->
-
-<!-- VIEW: PANELS & SYNC -->
-
-<!-- ══════════════════════════════════════════════ -->
-
-<div class="view" id="view-panels">
-
-  <div class="info-box">
-    <strong>How XUI Sync works:</strong> Enter your panel URL + admin credentials below. The dashboard calls the XUI API to pull all lines and their expiration dates. You then link each line to a customer. Linked lines stay remembered via localStorage. <strong>8K Gold (my8k.me)</strong> and <strong>SuperAdmin</strong> don't have public APIs — use Quick Open to access them directly.
-  </div>
-
-  <!-- XUI PANEL 1 -->
-
-  <div id="sync-panel-0"></div>
-  <!-- XUI PANEL 2 -->
-  <div id="sync-panel-1"></div>
-  <!-- 8K Gold -->
-  <div id="sync-panel-2"></div>
-  <!-- SuperAdmin -->
-  <div id="sync-panel-3"></div>
-
-</div>
-
-<!-- ══════════════════════════════════════════════ -->
-
-<!-- VIEW: SETTINGS -->
-
-<!-- ══════════════════════════════════════════════ -->
-
-<div class="view" id="view-settings">
-  <div class="info-box" style="border-color:rgba(0,245,212,0.2); background:rgba(0,245,212,0.05);">
-    <strong style="color:var(--cyan)">🏠 Home Assistant Integration</strong><br><br>
-    Host this HTML file on your local server (Raspberry Pi, NAS, always-on PC), then add a <strong>Webpage Card</strong> in your HA dashboard:<br><br>
-    <code>type: iframe</code><br>
-    <code>url: http://YOUR-LOCAL-IP:8080/iptv-command-center.html</code><br>
-    <code>aspect_ratio: 100%</code><br><br>
-    To serve the file: <code>python3 -m http.server 8080</code> in the same folder.<br>
-    All your credentials and customer data stay saved in the browser localStorage on that device.
-  </div>
-
-  <div class="cred-card">
-    <div class="cred-header">
-      <div class="cred-title">💾 Data Management</div>
-    </div>
-    <div style="display:flex; gap:12px; flex-wrap:wrap;">
-      <button class="save-cred-btn" onclick="exportData()">⬇ Export All Data (JSON)</button>
-      <button class="save-cred-btn" style="background:var(--s2);color:var(--text);border:1px solid var(--border);" onclick="importData()">⬆ Import Data</button>
-      <button class="save-cred-btn" style="background:rgba(255,62,94,0.2);color:var(--red);border:1px solid rgba(255,62,94,0.3);" onclick="clearData()">🗑 Clear All Data</button>
-    </div>
-    <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
-  </div>
-
-  <div class="cred-card" style="margin-top:14px;">
-    <div class="cred-header"><div class="cred-title">ℹ️ About</div></div>
-    <div style="font-size:13px; color:var(--muted2); line-height:1.8; font-family:var(--mono);">
-      IPTV Ops Command Center v2.0<br>
-      Panels: kytv.xyz (XUI) • thexpanel.xyz (XUI) • my8k.me (8K Gold) • superadminpanels.com<br>
-      XUI API sync • localStorage persistence • Home Assistant ready
-    </div>
-  </div>
-</div>
-
-</div><!-- /.app -->
-
-<!-- ══════ MODALS ══════════════════════════════════ -->
-
-<!-- Add Customer -->
-
-<div class="overlay" id="modal-add-cust">
-  <div class="modal">
-    <h3>➕ Add Customer</h3>
-    <div class="mfg">
-      <label class="mfl">Full Name</label>
-      <input class="mfi" id="ac-name" placeholder="e.g. Mike Johnson">
-    </div>
-    <div class="mrow">
-      <div class="mfg">
-        <label class="mfl">Line Username (optional)</label>
-        <input class="mfi" id="ac-user" placeholder="Panel username">
-      </div>
-      <div class="mfg">
-        <label class="mfl">Panel</label>
-        <select class="mfi" id="ac-panel">
-          <option value="">Select Panel</option>
-          <option>kytv.xyz (XUI)</option>
-          <option>thexpanel.xyz (XUI)</option>
-          <option>my8k.me (8K Gold)</option>
-          <option>superadminpanels.com</option>
-        </select>
+  <div class="app">
+    <!-- HEADER -->
+    <div class="brk hdr">
+      <div class="c1"></div>
+      <div class="c2"></div>
+      <div class="hdr-eye">// ROCKBOTTOM TV //</div>
+      <div class="hdr-title">IPTV OPS CENTER</div>
+      <div class="hdr-sub">COMMAND DASHBOARD</div>
+      <div class="hdr-status">
+        <div class="hs"><div class="hdot"></div>SYSTEM ONLINE</div>
+        <div id="clk">--:--:--</div>
       </div>
     </div>
-    <div class="mrow">
-      <div class="mfg">
-        <label class="mfl">Package</label>
-        <input class="mfi" id="ac-pkg" placeholder="Premium, Basic...">
-      </div>
-      <div class="mfg">
-        <label class="mfl">Monthly Price ($)</label>
-        <input class="mfi" id="ac-price" type="number" placeholder="20">
-      </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tb on" onclick="go('overview',this)">📊 OVERVIEW</button>
+      <button class="tb" onclick="go('customers',this)" id="t-cust">👥 CLIENTS</button>
+      <button class="tb" onclick="go('alerts',this)">
+        🔔 ALERTS<span class="tbadge" id="abadge">0</span>
+      </button>
+      <button class="tb" onclick="go('panels',this)">🖥 PANELS</button>
     </div>
-    <div class="mrow">
-      <div class="mfg">
-        <label class="mfl">Next Bill Date</label>
-        <input class="mfi" id="ac-date" type="date">
-      </div>
-      <div class="mfg">
-        <label class="mfl">Phone / Contact</label>
-        <input class="mfi" id="ac-contact" placeholder="Optional">
-      </div>
-    </div>
-    <div class="mfg">
-      <label class="mfl">Notes</label>
-      <input class="mfi" id="ac-notes" placeholder="Optional notes">
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModals()">Cancel</button>
-      <button class="btn-primary" onclick="saveCustomer()">Save Customer</button>
-    </div>
-  </div>
-</div>
 
-<!-- Link Line Modal -->
-
-<div class="overlay" id="modal-link">
-  <div class="modal">
-    <h3>🔗 Link Line to Customer</h3>
-    <p style="color:var(--muted2);font-size:13px;margin-bottom:16px;">Select which customer this line belongs to. This is remembered permanently.</p>
-    <div class="mfg">
-      <label class="mfl">Line Username</label>
-      <input class="mfi" id="link-user" readonly style="opacity:0.6">
-    </div>
-    <div class="mfg">
-      <label class="mfl">Expiration</label>
-      <input class="mfi" id="link-exp" readonly style="opacity:0.6">
-    </div>
-    <div class="mfg">
-      <label class="mfl">Assign to Customer</label>
-      <select class="mfi" id="link-cust-sel"></select>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModals()">Cancel</button>
-      <button class="btn-primary" onclick="saveLinkLine()">Link Customer</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ══════════════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════════════
-
-function loadState() {
-  try { return JSON.parse(localStorage.getItem('iptv-ops-v2') || 'null'); } catch(e) { return null; }
-}
-
-function defaultState() {
-  const d = (n) => { const x=new Date(); x.setDate(x.getDate()+n); return x.toISOString().split('T')[0]; };
-  return {
-    customers: [
-      {id:1,name:'Mike Johnson',user:'mikej_tv',panel:'kytv.xyz (XUI)',pkg:'Premium',price:25,date:d(-2),contact:'',notes:''},
-      {id:2,name:'Sarah Williams',user:'sarahw',panel:'thexpanel.xyz (XUI)',pkg:'Basic',price:15,date:d(3),contact:'',notes:''},
-      {id:3,name:'Carlos Mendez',user:'carlos_m',panel:'kytv.xyz (XUI)',pkg:'Premium',price:25,date:d(5),contact:'',notes:'Wants 4K'},
-      {id:4,name:'Tasha Brown',user:'tbrown22',panel:'my8k.me (8K Gold)',pkg:'Sports',price:30,date:d(14),contact:'',notes:''},
-      {id:5,name:'Dave Kim',user:'davekim',panel:'superadminpanels.com',pkg:'Basic',price:15,date:d(22),contact:'',notes:''},
-    ],
-    credentials: {
-      xui0: { url:'https://kytv.xyz', user:'', pass:'', port:'80' },
-      xui1: { url:'https://thexpanel.xyz', user:'', pass:'', port:'80' },
-      my8k: { url:'https://my8k.me', user:'Rockbottom', pass:'' },
-      sadmin: { url:'https://superadminpanels.com', user:'', pass:'' },
-    },
-    lineLinks: {},   // username -> customer id
-    syncedLines: {}, // panel key -> [{username, expiration}]
-  };
-}
-
-let S = loadState() || defaultState();
-function save() { localStorage.setItem('iptv-ops-v2', JSON.stringify(S)); }
-
-// ══════════════════════════════════════════════════════
-// HELPERS
-// ══════════════════════════════════════════════════════
-
-function daysUntil(dateStr) {
-  const t = new Date(); t.setHours(0,0,0,0);
-  const d = new Date(dateStr); d.setHours(0,0,0,0);
-  return Math.round((d-t)/86400000);
-}
-
-function statusOf(days) {
-  if(days < 0) return ['b-red','OVERDUE','overdue'];
-  if(days <= 3) return ['b-red', days===0?'TODAY':`${days}d`,'week'];
-  if(days <= 7) return ['b-yellow',`${days}d`,'week'];
-  return ['b-green',`${days}d`,'ok'];
-}
-
-function fmtDate(s) {
-  if(!s) return '—';
-  return new Date(s).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-}
-
-function initials(name) {
-  return name.split(' ').map(x=>x[0]||'').join('').slice(0,2).toUpperCase();
-}
-
-// ══════════════════════════════════════════════════════
-// CLOCK
-// ══════════════════════════════════════════════════════
-function tick() {
-  document.getElementById('topbar-clock').textContent =
-    new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-}
-setInterval(tick,1000); tick();
-
-// ══════════════════════════════════════════════════════
-// TABS
-// ══════════════════════════════════════════════════════
-function switchTab(name) {
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('view-'+name).classList.add('active');
-  if(name==='overview') renderOverview();
-  if(name==='customers') renderCustomers();
-  if(name==='alerts') renderAlerts();
-  if(name==='panels') renderPanelsView();
-}
-
-// ══════════════════════════════════════════════════════
-// OVERVIEW
-// ══════════════════════════════════════════════════════
-function renderOverview() {
-  const cs = S.customers;
-  document.getElementById('ov-total').textContent = cs.length;
-  document.getElementById('ov-over').textContent = cs.filter(c=>daysUntil(c.date)<0).length;
-  document.getElementById('ov-week').textContent = cs.filter(c=>{const d=daysUntil(c.date);return d>=0&&d<=7;}).length;
-  document.getElementById('ov-rev').textContent = '$'+cs.reduce((a,c)=>a+Number(c.price||0),0);
-
-  // Lines count from synced data
-  const totalLines = Object.values(S.syncedLines||{}).reduce((a,arr)=>a+(arr?.length||0),0);
-  document.getElementById('ov-lines').textContent = totalLines || '—';
-
-  // Panel cards
-  const panels = [
-    {key:'xui0',name:'kytv.xyz',type:'XUI / Xtream UI',color:'var(--cyan)',dot:'#00f5d4',url:S.credentials.xui0.url,syncKey:'xui0'},
-    {key:'xui1',name:'thexpanel.xyz',type:'XUI / Xtream UI',color:'var(--blue)',dot:'#3b8bff',url:S.credentials.xui1.url,syncKey:'xui1'},
-    {key:'my8k',name:'my8k.me',type:'8K Gold Panel',color:'var(--orange)',dot:'#ff8c42',url:'https://my8k.me',syncKey:null},
-    {key:'sadmin',name:'superadminpanels.com',type:'SuperAdmin Panel',color:'var(--purple)',dot:'#8b5cf6',url:'https://superadminpanels.com',syncKey:null},
-  ];
-
-  document.getElementById('overview-panels').innerHTML = panels.map(p => {
-    const lines = S.syncedLines[p.syncKey];
-    const lineCount = lines ? lines.length : null;
-    const overdue = lines ? lines.filter(l=>{const e=new Date(l.expiration*1000); return e<new Date();}).length : 0;
-    return `
-      <div class="panel-card">
-        <div class="panel-head">
-          <div class="panel-title">
-            <div class="panel-dot" style="background:${p.dot};box-shadow:0 0 8px ${p.dot}"></div>
-            <div>
-              <div class="panel-name">${p.name}</div>
-              <div class="panel-type">${p.type}</div>
-            </div>
+    <!-- OVERVIEW -->
+    <div id="v-overview">
+      <div class="sgrid">
+        <div class="brk sc">
+          <div class="c1"></div>
+          <div class="c2"></div>
+          <div class="sl">Total Clients</div>
+          <div class="sv cg" id="ov-t">0</div>
+        </div>
+        <div class="brk sc">
+          <div class="c1"></div>
+          <div class="c2"></div>
+          <div class="sl">Overdue</div>
+          <div class="sv cr" id="ov-o">0</div>
+        </div>
+        <div class="brk sc">
+          <div class="c1"></div>
+          <div class="c2"></div>
+          <div class="sl">Due This Week</div>
+          <div class="sv cy" id="ov-w">0</div>
+        </div>
+        <div class="brk sc">
+          <div class="c1"></div>
+          <div class="c2"></div>
+          <div class="sl">Monthly Revenue</div>
+          <div class="sv cc" id="ov-r" style="font-size: clamp(18px, 5vw, 26px)">
+            $0
           </div>
-          <a class="panel-open-btn" href="${p.url}" target="_blank">Open ↗</a>
-        </div>
-        ${lineCount !== null ? `
-        <div class="panel-body">
-          <div class="panel-stats">
-            <div class="ps"><div class="ps-val" style="color:${p.color}">${lineCount}</div><div class="ps-lbl">Lines</div></div>
-            <div class="ps"><div class="ps-val" style="color:var(--red)">${overdue}</div><div class="ps-lbl">Overdue</div></div>
-            <div class="ps"><div class="ps-val" style="color:var(--green)">${lineCount-overdue}</div><div class="ps-lbl">Active</div></div>
-          </div>
-        </div>` : `
-        <div class="panel-body-manual">
-          ${p.syncKey ? 'Not synced yet — go to Panels & Sync tab.' : 'Manual access only (no API). Click Open ↗ to log in.'}
-        </div>`}
-      </div>
-    `;
-  }).join('');
-
-  // Upcoming bills
-  const upcoming = cs.filter(c=>{const d=daysUntil(c.date);return d>=0&&d<=7;}).sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
-  const utb = document.getElementById('upcoming-tbody');
-  if(!upcoming.length) {
-    utb.innerHTML=`<tr><td colspan="6" class="empty-state">No bills due in the next 7 days</td></tr>`;
-  } else {
-    utb.innerHTML = upcoming.map(c=>{
-      const days=daysUntil(c.date); const [cls,lbl]=statusOf(days);
-      return `<tr>
-        <td><strong>${c.name}</strong></td>
-        <td style="color:var(--muted2);font-size:12px">${c.panel||'—'}</td>
-        <td style="color:var(--green);font-family:var(--mono)">$${c.price}</td>
-        <td style="font-family:var(--mono);font-size:12px">${fmtDate(c.date)}</td>
-        <td><span class="badge ${cls}"><span class="bd"></span>${lbl}</span></td>
-        <td><button class="btn-xs" onclick="copyReminder(${c.id})">📋 Remind</button></td>
-      </tr>`;
-    }).join('');
-  }
-}
-
-// ══════════════════════════════════════════════════════
-// CUSTOMERS
-// ══════════════════════════════════════════════════════
-function renderCustomers() {
-  // Update panel filter options
-  const pf = document.getElementById('cust-panel-filter');
-  const panels = [...new Set(S.customers.map(c=>c.panel).filter(Boolean))];
-  pf.innerHTML = '<option value="">All Panels</option>' + panels.map(p=>`<option>${p}</option>`).join('');
-
-  const search = (document.getElementById('cust-search')?.value||'').toLowerCase();
-  const filter = document.getElementById('cust-filter')?.value||'';
-  const panelF = document.getElementById('cust-panel-filter')?.value||'';
-
-  let cs = [...S.customers].sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
-  if(search) cs = cs.filter(c=>c.name.toLowerCase().includes(search)||(c.user||'').toLowerCase().includes(search));
-  if(filter) cs = cs.filter(c=>{const d=daysUntil(c.date);const[,,s]=statusOf(d);return s===filter;});
-  if(panelF) cs = cs.filter(c=>c.panel===panelF);
-
-  const tb = document.getElementById('cust-tbody');
-  if(!cs.length) { tb.innerHTML=`<tr><td colspan="8" class="empty-state">No customers found</td></tr>`; return; }
-
-  tb.innerHTML = cs.map(c=>{
-    const days=daysUntil(c.date); const[cls,lbl]=statusOf(days);
-    return `<tr>
-      <td><strong>${c.name}</strong>${c.notes?`<div style="font-size:11px;color:var(--muted);margin-top:1px">${c.notes}</div>`:''}</td>
-      <td style="font-family:var(--mono);font-size:12px;color:var(--blue)">${c.user||'—'}</td>
-      <td style="color:var(--muted2)">${c.pkg||'—'}</td>
-      <td style="font-family:var(--mono);color:var(--green)">$${c.price}</td>
-      <td style="font-family:var(--mono);font-size:12px">${fmtDate(c.date)}</td>
-      <td><span class="badge ${cls}"><span class="bd"></span>${lbl}</span></td>
-      <td style="font-size:12px;color:var(--muted2)">${(c.panel||'—').replace(' (XUI)','').replace(' (8K Gold)','')}</td>
-      <td>
-        <div class="act-btns">
-          <button class="btn-xs" onclick="renewCustomer(${c.id})">+1mo</button>
-          <button class="btn-xs" onclick="copyReminder(${c.id})">📋</button>
-          <button class="btn-xs danger" onclick="deleteCustomer(${c.id})">✕</button>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-function renewCustomer(id) {
-  const c=S.customers.find(x=>x.id===id); if(!c) return;
-  const d=new Date(c.date); d.setMonth(d.getMonth()+1);
-  c.date=d.toISOString().split('T')[0];
-  save(); renderCustomers(); renderOverview();
-}
-
-function deleteCustomer(id) {
-  if(!confirm('Remove this customer?')) return;
-  S.customers=S.customers.filter(x=>x.id!==id);
-  save(); renderCustomers(); renderOverview();
-}
-
-function copyReminder(id) {
-  const c=S.customers.find(x=>x.id===id); if(!c) return;
-  const days=daysUntil(c.date);
-  const when = days<0?`is ${Math.abs(days)} day${Math.abs(days)!==1?'s':''} overdue`:days===0?'is due today':`is due in ${days} day${days!==1?'s':''}`;
-  const msg=`Hi ${c.name.split(' ')[0]}! Your IPTV subscription ($${c.price}/mo) ${when}. Please send payment to keep your service active. Thanks! 📺`;
-  navigator.clipboard.writeText(msg).then(()=>alert('✅ Reminder message copied!\n\n'+msg)).catch(()=>prompt('Copy this message:',msg));
-}
-
-// ══════════════════════════════════════════════════════
-// ALERTS
-// ══════════════════════════════════════════════════════
-function renderAlerts() {
-  const overdue = S.customers.filter(c=>daysUntil(c.date)<0).sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
-  const week = S.customers.filter(c=>{const d=daysUntil(c.date);return d>=0&&d<=7;}).sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
-
-  const makeCard=(c,urgent)=>{
-    const days=daysUntil(c.date);
-    const label=days<0?`${Math.abs(days)} day${Math.abs(days)!==1?'s':''} overdue`:days===0?'Due TODAY':`Due in ${days} day${days!==1?'s':''}`;
-    return `<div class="alert-card ${urgent?'urgent':'warn'}">
-      <div class="alert-ava ${urgent?'ava-red':'ava-yellow'}">${initials(c.name)}</div>
-      <div class="alert-info">
-        <div class="alert-name">${c.name}</div>
-        <div class="alert-meta">${label} · $${c.price}/mo</div>
-        <div class="alert-panel">${c.panel||'—'} ${c.user?'· @'+c.user:''}</div>
-      </div>
-      <button class="copy-msg-btn" onclick="copyReminder(${c.id})" title="Copy reminder message">📋</button>
-    </div>`;
-  };
-
-  document.getElementById('alerts-overdue').innerHTML = overdue.length ? overdue.map(c=>makeCard(c,true)).join('') : '<div class="empty-state" style="padding:16px;color:var(--muted)">None overdue ✅</div>';
-  document.getElementById('alerts-week').innerHTML = week.length ? week.map(c=>makeCard(c,false)).join('') : '<div class="empty-state" style="padding:16px;color:var(--muted)">None due this week ✅</div>';
-
-  const hasAny = overdue.length||week.length;
-  document.getElementById('alerts-empty').style.display = hasAny?'none':'block';
-  document.getElementById('alerts-overdue-label').style.display = 'flex';
-  document.getElementById('alerts-week-label').style.display = 'flex';
-}
-
-// ══════════════════════════════════════════════════════
-// PANELS & SYNC VIEW
-// ══════════════════════════════════════════════════════
-function renderPanelsView() {
-  renderXUIPanel(0,'kytv.xyz','xui0','var(--cyan)');
-  renderXUIPanel(1,'thexpanel.xyz','xui1','var(--blue)');
-  renderManualPanel(2,'my8k.me (8K Gold)','my8k','var(--orange)','https://my8k.me','Username: Rockbottom · Balance: 31 Credits · No public API');
-  renderManualPanel(3,'superadminpanels.com','sadmin','var(--purple)','https://superadminpanels.com','CAPTCHA login — cannot be automated. Save your credentials in browser.');
-}
-
-function renderXUIPanel(idx, name, key, color) {
-  const creds = S.credentials[key];
-  const lines = S.syncedLines[key];
-  const container = document.getElementById(`sync-panel-${idx}`);
-  const isSaved = creds.user && creds.pass;
-
-  container.innerHTML = `
-    <div class="cred-card" style="margin-bottom:14px">
-      <div class="cred-header">
-        <div class="cred-title" style="color:${color}">🖥 ${name} <span style="color:var(--muted);font-size:12px;font-family:var(--mono);font-weight:400">XUI Panel</span></div>
-        <div>
-          ${isSaved?`<span class="cred-saved">✓ Credentials saved</span>`:`<span class="cred-unsaved">Not configured</span>`}
         </div>
       </div>
-      <div class="cred-grid3">
-        <div class="fg"><div class="fl">Panel URL</div><input class="fi" id="${key}-url" value="${creds.url}" placeholder="https://kytv.xyz"></div>
-        <div class="fg"><div class="fl">Admin User</div><input class="fi" id="${key}-user" value="${creds.user}" placeholder="admin"></div>
-        <div class="fg"><div class="fl">Password</div><input class="fi" id="${key}-pass" type="password" value="${creds.pass}" placeholder="••••••••"></div>
+
+      <div class="sec">YOUR PANELS</div>
+      <div class="pgrid" id="ov-panels"></div>
+
+      <div class="sec">UPCOMING BILLS</div>
+      <div class="alist" id="ov-up"></div>
+
+      <div class="bpad"></div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div id="v-customers" style="display: none">
+      <div class="srchwrap">
+        <span class="srchicon">🔍</span>
+        <input
+          class="srchi"
+          id="csearch"
+          placeholder="Search clients..."
+          oninput="renderC()"
+        />
       </div>
-      <div style="display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap">
-        <button class="save-cred-btn" onclick="saveCreds('${key}',['${key}-url','${key}-user','${key}-pass'])">Save Credentials</button>
-        <button class="sync-btn" id="sync-btn-${key}" onclick="syncXUI('${key}','${name}')">
-          <span>⟳</span> Sync Lines from ${name}
+
+      <div class="pills">
+        <div class="pill on" onclick="setf(this,'')">ALL</div>
+        <div class="pill" onclick="setf(this,'overdue')">OVERDUE</div>
+        <div class="pill" onclick="setf(this,'week')">DUE SOON</div>
+        <div class="pill" onclick="setf(this,'ok')">GOOD</div>
+      </div>
+
+      <div class="clist" id="clist"></div>
+      <div class="bpad"></div>
+    </div>
+
+    <!-- ALERTS -->
+    <div id="v-alerts" style="display: none">
+      <div class="sec" style="color: var(--red)">⚠ OVERDUE</div>
+      <div class="alist" id="al-o"></div>
+
+      <div class="sec" style="color: var(--yellow)">⏰ DUE THIS WEEK</div>
+      <div class="alist" id="al-w"></div>
+
+      <div class="bpad"></div>
+    </div>
+
+    <!-- PANELS -->
+    <div id="v-panels" style="display: none">
+      <div class="sec">QUICK ACCESS</div>
+      <div class="pgrid">
+        <a
+          class="brk pb"
+          href="https://kytv.xyz"
+          target="_blank"
+          style="--pc: var(--glow)"
+        >
+          <div class="c1"></div>
+          <div class="c2"></div>
+          <div class="pi">📡</div>
+          <div class="pn">KYTV.XYZ</div>
+          <div class="pt">XUI Panel</div>
+          <div class="pa">↗</div>
+        </a>
+
+        <a
+          class="brk pb"
+          href="https://thexpanel.xyz"
+          target="_blank"
+          style="--pc: var(--cyan)"
+        >
+          <div class="c1"></div>
+          <div class="c2"></div>
+          <div class="pi">🖥</div>
+          <div class="pn">THEXPANEL</div>
+          <div class="pt">XUI Panel</div>
+          <div class="pa">↗</div>
+        </a>
+
+        <a
+          class="brk pb"
+          href="https://my8k.me"
+          target="_blank"
+          style="--pc: var(--orange)"
+        >
+          <div class="c1"></div>
+          <div class="c2"></div>
+          <div class="pi">⚡</div>
+          <div class="pn">MY8K.ME</div>
+          <div class="pt">8K Gold Panel</div>
+          <div class="pa">↗</div>
+        </a>
+
+        <a
+          class="brk pb"
+          href="https://superadminpanels.com"
+          target="_blank"
+          style="--pc: var(--purple)"
+        >
+          <div class="c1"></div>
+          <div class="c2"></div>
+          <div class="pi">🔑</div>
+          <div class="pn">SUPERADMIN</div>
+          <div class="pt">SuperAdmin Panel</div>
+          <div class="pa">↗</div>
+        </a>
+      </div>
+
+      <div class="sec">CREDENTIAL REMINDERS</div>
+      <div class="brk" style="background: var(--card); padding: 16px; margin-bottom: 12px">
+        <div class="c1"></div>
+        <div class="c2"></div>
+
+        <div class="fg">
+          <label class="fl">KYTV.XYZ Username</label>
+          <input class="fi" id="cr-ku" placeholder="admin" />
+        </div>
+
+        <div class="fg">
+          <label class="fl">KYTV.XYZ Password</label>
+          <input class="fi" id="cr-kp" type="password" placeholder="••••••••" />
+        </div>
+
+        <div class="fg">
+          <label class="fl">THEXPANEL Username</label>
+          <input class="fi" id="cr-tu" placeholder="admin" />
+        </div>
+
+        <div class="fg">
+          <label class="fl">THEXPANEL Password</label>
+          <input class="fi" id="cr-tp" type="password" placeholder="••••••••" />
+        </div>
+
+        <div class="fg">
+          <label class="fl">MY8K.ME</label>
+          <input class="fi" value="Rockbottom" readonly style="opacity: 0.6" />
+        </div>
+
+        <div class="fg">
+          <label class="fl">SUPERADMIN Username</label>
+          <input class="fi" id="cr-su" placeholder="username" />
+        </div>
+
+        <div class="fg">
+          <label class="fl">SUPERADMIN Password</label>
+          <input class="fi" id="cr-sp" type="password" placeholder="••••••••" />
+        </div>
+
+        <button class="db p" style="width: 100%; margin-top: 6px" onclick="saveCreds()">
+          SAVE CREDENTIALS
         </button>
-        <a href="${creds.url||'#'}" target="_blank" class="panel-open-btn">Open Panel ↗</a>
       </div>
 
-      ${lines ? `
-        <div style="margin-top:16px">
-          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">
-            ${lines.length} lines synced — link each to a customer
-          </div>
-          <div class="sync-results">
-            ${lines.map(l=>{
-              const linked = S.lineLinks[l.username];
-              const cust = linked ? S.customers.find(c=>c.id===linked) : null;
-              const expMs = l.expiration * 1000;
-              const expDate = new Date(expMs);
-              const daysLeft = Math.round((expMs - Date.now())/86400000);
-              const expCls = daysLeft<0?'over':daysLeft<=7?'soon':'ok';
-              return `<div class="sync-line">
-                <div class="sl-user">@${l.username}</div>
-                <div class="sl-exp ${expCls}">${expDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
-                <button class="link-btn ${cust?'linked':''}" onclick="openLinkModal('${l.username}','${expDate.toLocaleDateString()}')">
-                  ${cust ? '✓ '+cust.name : 'Link Customer'}
-                </button>
-              </div>`;
-            }).join('')}
-          </div>
+      <div class="sec">DATA BACKUP</div>
+      <div style="display: flex; gap: 10px">
+        <button class="db p" style="flex: 1" onclick="expData()">⬇ EXPORT</button>
+        <button class="db s" style="flex: 1" onclick="document.getElementById('impf').click()">
+          ⬆ IMPORT
+        </button>
+      </div>
+
+      <input
+        type="file"
+        id="impf"
+        accept=".json"
+        style="display: none"
+        onchange="impData(event)"
+      />
+
+      <div class="bpad"></div>
+    </div>
+  </div>
+
+  <!-- FAB -->
+  <button class="fab" onclick="openAdd()">+</button>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ADD DRAWER -->
+  <div class="ov" id="drw-add" onclick="if(event.target===this)closeD()">
+    <div class="drw">
+      <div class="dtitle">// ADD CLIENT //</div>
+
+      <div class="fg">
+        <label class="fl">Full Name *</label>
+        <input class="fi" id="ac-n" placeholder="e.g. John Smith" autocomplete="off" />
+      </div>
+
+      <div class="fg">
+        <label class="fl">Phone Number</label>
+        <input class="fi" id="ac-ph" type="tel" placeholder="555-867-5309" />
+      </div>
+
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">Panel</label>
+          <select class="fi" id="ac-pan">
+            <option value="kytv.xyz">kytv.xyz (XUI)</option>
+            <option value="thexpanel.xyz">thexpanel.xyz (XUI)</option>
+            <option value="my8k.me">my8k.me (8K Gold)</option>
+            <option value="superadminpanels.com">SuperAdmin</option>
+          </select>
         </div>
-      ` : (isSaved ? `<div style="font-size:12px;color:var(--muted2);font-family:var(--mono);margin-top:10px">Click "Sync Lines" to pull live data from ${name}</div>` : '')}
+
+        <div class="fg">
+          <label class="fl">Package</label>
+          <input class="fi" id="ac-pk" placeholder="Premium" />
+        </div>
+      </div>
+
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">Price ($/mo)</label>
+          <input class="fi" id="ac-pr" type="number" value="40" />
+        </div>
+
+        <div class="fg">
+          <label class="fl">Next Bill Date</label>
+          <input class="fi" id="ac-dt" type="date" />
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Notes</label>
+        <input class="fi" id="ac-nt" placeholder="Optional..." />
+      </div>
+
+      <div class="dacts">
+        <button class="db s" onclick="closeD()">CANCEL</button>
+        <button class="db p" onclick="saveC()">SAVE CLIENT</button>
+      </div>
     </div>
-  `;
-}
+  </div>
 
-function renderManualPanel(idx, name, key, color, url, note) {
-  const creds = S.credentials[key];
-  const container = document.getElementById(`sync-panel-${idx}`);
-  container.innerHTML = `
-    <div class="cred-card" style="margin-bottom:14px">
-      <div class="cred-header">
-        <div class="cred-title" style="color:${color}">🔗 ${name}</div>
-        <div style="font-family:var(--mono);font-size:11px;color:var(--orange)">⚠ Manual Access Only</div>
-      </div>
-      <div class="cred-grid">
-        <div class="fg"><div class="fl">Username</div><input class="fi" id="${key}-user" value="${creds.user||''}" placeholder="Your username"></div>
-        <div class="fg"><div class="fl">Password (local reminder)</div><input class="fi" id="${key}-pass" type="password" value="${creds.pass||''}" placeholder="••••••••"></div>
-      </div>
-      <div style="font-size:12px;color:var(--muted2);font-family:var(--mono);margin-top:10px;line-height:1.6">${note}</div>
-      <div style="display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap">
-        <button class="save-cred-btn" onclick="saveManualCreds('${key}')">Save Reminder</button>
-        <a href="${url}" target="_blank" class="panel-open-btn" style="border-color:${color};color:${color}">Open ${name} ↗</a>
-      </div>
-    </div>
-  `;
-}
-
-function saveCreds(key, fieldIds) {
-  const [urlId,userId,passId] = fieldIds;
-  S.credentials[key].url = document.getElementById(urlId)?.value?.trim() || S.credentials[key].url;
-  S.credentials[key].user = document.getElementById(userId).value.trim();
-  S.credentials[key].pass = document.getElementById(passId).value;
-  save(); renderPanelsView();
-  alert('✅ Credentials saved to localStorage');
-}
-
-function saveManualCreds(key) {
-  S.credentials[key].user = document.getElementById(`${key}-user`).value.trim();
-  S.credentials[key].pass = document.getElementById(`${key}-pass`).value;
-  save(); renderPanelsView();
-  alert('✅ Saved locally');
-}
-
-// ══════════════════════════════════════════════════════
-// XUI SYNC (real API call via CORS proxy or direct)
-// ══════════════════════════════════════════════════════
-async function syncXUI(key, panelName) {
-  const creds = S.credentials[key];
-  if(!creds.user||!creds.pass) { alert('Please save your credentials first.'); return; }
-
-  const btn = document.getElementById(`sync-btn-${key}`);
-  btn.classList.add('syncing');
-  btn.innerHTML = '<span class="spin">⟳</span> Syncing...';
-
-  try {
-    const baseUrl = creds.url.replace(/\/$/, '');
-    // XUI API endpoint
-    const apiUrl = `${baseUrl}/api?username=${encodeURIComponent(creds.user)}&password=${encodeURIComponent(creds.pass)}&action=get_lines`;
-
-    const res = await fetch(apiUrl, { mode: 'cors', headers: { 'Accept': 'application/json' } });
-
-    if(!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-
-    // XUI returns array of line objects
-    const lines = Array.isArray(data) ? data : (data.lines || data.data || []);
-    if(!lines.length) throw new Error('No lines returned. Check credentials or panel URL.');
-
-    S.syncedLines[key] = lines.map(l => ({
-      username: l.username,
-      expiration: l.exp_date || l.expiration || l.expire
-    }));
-    save();
-    renderPanelsView();
-    renderOverview();
-    alert(`✅ Synced ${S.syncedLines[key].length} lines from ${panelName}`);
-
-  } catch(err) {
-    // CORS error is very common — explain clearly
-    const isCors = err.message.includes('Failed to fetch') || err.message.includes('CORS') || err.message.includes('NetworkError');
-    if(isCors) {
-      const choice = confirm(`⚠️ CORS Error: The panel is blocking direct browser requests.\n\nThis is normal for browser-based access. Choose an option:\n\n• OK = Load demo data so you can see how it looks\n• Cancel = Learn about hosting a proxy`);
-      if(choice) {
-        injectDemoLines(key, panelName);
-      } else {
-        alert(`To fix CORS:\n\n1. Host this file on the same server as your panel\n2. Or run a simple proxy: npm install -g cors-anywhere\n3. Or use the Home Assistant REST integration to call the API server-side\n\nThe manual customer entry method always works as a fallback.`);
+  <script>
+    function ls() {
+      try {
+        return JSON.parse(localStorage.getItem('rb-v3') || 'null');
+      } catch (e) {
+        return null;
       }
-    } else {
-      alert(`Sync error: ${err.message}\n\nDouble-check your panel URL and credentials.`);
     }
-  }
-  btn.classList.remove('syncing');
-  btn.innerHTML = '<span>⟳</span> Sync Lines';
-}
 
-function injectDemoLines(key, panelName) {
-  const now = Math.floor(Date.now()/1000);
-  const day = 86400;
-  S.syncedLines[key] = [
-    {username:'mikej_tv', expiration: now - (2*day)},
-    {username:'sarahw', expiration: now + (3*day)},
-    {username:'carlos_m', expiration: now + (5*day)},
-    {username:'user_4421', expiration: now + (30*day)},
-    {username:'xtv_jones', expiration: now + (45*day)},
-  ];
-  save(); renderPanelsView(); renderOverview();
-  alert(`✅ Demo data loaded for ${panelName} — actual sync requires server-side hosting.`);
-}
+    let S = ls() || { customers: [], creds: {} };
 
-// ══════════════════════════════════════════════════════
-// LINK LINE TO CUSTOMER
-// ══════════════════════════════════════════════════════
-let _linkingUser = null;
+    function sv() {
+      localStorage.setItem('rb-v3', JSON.stringify(S));
+    }
 
-function openLinkModal(username, expDate) {
-  _linkingUser = username;
-  document.getElementById('link-user').value = username;
-  document.getElementById('link-exp').value = expDate;
-  const sel = document.getElementById('link-cust-sel');
-  sel.innerHTML = '<option value="">— Select Customer —</option>' +
-    S.customers.map(c=>`<option value="${c.id}" ${S.lineLinks[username]===c.id?'selected':''}>${c.name}</option>`).join('');
-  document.getElementById('modal-link').classList.add('on');
-}
+    function du(d) {
+      const t = new Date();
+      t.setHours(0, 0, 0, 0);
+      const x = new Date(d);
+      x.setHours(0, 0, 0, 0);
+      return Math.round((x - t) / 86400000);
+    }
 
-function saveLinkLine() {
-  const custId = parseInt(document.getElementById('link-cust-sel').value);
-  if(!custId) { alert('Select a customer.'); return; }
-  S.lineLinks[_linkingUser] = custId;
-  // Also update the customer's user field
-  const cust = S.customers.find(c=>c.id===custId);
-  if(cust && !cust.user) cust.user = _linkingUser;
-  save(); closeModals(); renderPanelsView();
-}
+    function stat(days) {
+      if (days < 0) return ['sr', 'bred', `${Math.abs(days)}D OVERDUE`, 'overdue'];
+      if (days === 0) return ['sr', 'bred', 'DUE TODAY', 'week'];
+      if (days <= 3) return ['sr', 'bred', `IN ${days}D`, 'week'];
+      if (days <= 7) return ['sy', 'by', `IN ${days}D`, 'week'];
+      return ['sg', 'bg', `${days}D`, 'ok'];
+    }
 
-// ══════════════════════════════════════════════════════
-// ADD CUSTOMER MODAL
-// ══════════════════════════════════════════════════════
-function openAddCustomer() {
-  const d = new Date(); d.setMonth(d.getMonth()+1);
-  document.getElementById('ac-date').value = d.toISOString().split('T')[0];
-  document.getElementById('ac-name').value = '';
-  document.getElementById('ac-user').value = '';
-  document.getElementById('ac-pkg').value = '';
-  document.getElementById('ac-price').value = '';
-  document.getElementById('ac-contact').value = '';
-  document.getElementById('ac-notes').value = '';
-  document.getElementById('modal-add-cust').classList.add('on');
-}
+    function fd(s) {
+      if (!s) return '—';
+      return new Date(s).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    }
 
-function saveCustomer() {
-  const name = document.getElementById('ac-name').value.trim();
-  const date = document.getElementById('ac-date').value;
-  if(!name||!date) { alert('Name and date are required.'); return; }
-  S.customers.push({
-    id: Date.now(),
-    name,
-    user: document.getElementById('ac-user').value.trim(),
-    panel: document.getElementById('ac-panel').value,
-    pkg: document.getElementById('ac-pkg').value.trim(),
-    price: Number(document.getElementById('ac-price').value)||0,
-    date,
-    contact: document.getElementById('ac-contact').value.trim(),
-    notes: document.getElementById('ac-notes').value.trim(),
-  });
-  save(); closeModals(); renderCustomers(); renderOverview();
-}
+    function ini(n) {
+      return n
+        .split(' ')
+        .map((x) => x[0] || '')
+        .join('')
+        .slice(0, 2)
+        .toUpperCase();
+    }
 
-function closeModals() {
-  document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('on'));
-}
-document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeModals();}));
+    function toast(m) {
+      const t = document.getElementById('toast');
+      t.textContent = m;
+      t.classList.add('on');
+      setTimeout(() => t.classList.remove('on'), 2500);
+    }
 
-// ══════════════════════════════════════════════════════
-// DATA EXPORT / IMPORT
-// ══════════════════════════════════════════════════════
-function exportData() {
-  const blob = new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = 'iptv-ops-backup.json'; a.click();
-}
+    function tick() {
+      document.getElementById('clk').textContent = new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    }
 
-function importData() { document.getElementById('import-file').click(); }
+    setInterval(tick, 1000);
+    tick();
 
-function handleImport(e) {
-  const f = e.target.files[0]; if(!f) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    try {
-      S = JSON.parse(ev.target.result);
-      save(); renderOverview(); renderCustomers();
-      alert('✅ Data imported!');
-    } catch(err) { alert('Invalid JSON file.'); }
-  };
-  r.readAsText(f);
-}
+    let curTab = 'overview',
+      curF = '';
 
-function clearData() {
-  if(!confirm('⚠️ This will delete ALL customers, credentials, and synced data. Are you sure?')) return;
-  S = defaultState(); save();
-  renderOverview(); renderCustomers();
-  alert('Data cleared.');
-}
+    function go(name, btn) {
+      document.querySelectorAll('.tb').forEach((b) => b.classList.remove('on'));
+      btn.classList.add('on');
+      ['overview', 'customers', 'alerts', 'panels'].forEach((t) => {
+        document.getElementById('v-' + t).style.display = t === name ? 'block' : 'none';
+      });
+      curTab = name;
+      if (name === 'overview') rO();
+      if (name === 'customers') renderC();
+      if (name === 'alerts') rA();
+      if (name === 'panels') lCr();
+    }
 
-// ══════════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════════
-renderOverview();
-</script>
+    function rO() {
+      const cs = S.customers;
+      document.getElementById('ov-t').textContent = cs.length;
+      document.getElementById('ov-o').textContent = cs.filter((c) => du(c.date) < 0).length;
+      document.getElementById('ov-w').textContent = cs.filter((c) => {
+        const d = du(c.date);
+        return d >= 0 && d <= 7;
+      }).length;
+      document.getElementById('ov-r').textContent =
+        '$' + cs.reduce((a, c) => a + Number(c.price || 0), 0);
 
+      const urg = cs.filter((c) => du(c.date) <= 3).length;
+      const ab = document.getElementById('abadge');
+      if (urg > 0) {
+        ab.textContent = urg;
+        ab.style.display = 'flex';
+      } else {
+        ab.style.display = 'none';
+      }
+
+      const pls = [
+        { n: 'KYTV.XYZ', t: 'XUI', u: 'https://kytv.xyz', c: 'var(--glow)', i: '📡' },
+        { n: 'THEXPANEL', t: 'XUI', u: 'https://thexpanel.xyz', c: 'var(--cyan)', i: '🖥' },
+        { n: 'MY8K.ME', t: '8K Gold', u: 'https://my8k.me', c: 'var(--orange)', i: '⚡' },
+        {
+          n: 'SUPERADMIN',
+          t: 'SuperAdmin',
+          u: 'https://superadminpanels.com',
+          c: 'var(--purple)',
+          i: '🔑'
+        }
+      ];
+
+      document.getElementById('ov-panels').innerHTML = pls
+        .map(
+          (p) => `
+          <a class="brk pb" href="${p.u}" target="_blank" style="--pc:${p.c}">
+            <div class="c1"></div>
+            <div class="c2"></div>
+            <div class="pi">${p.i}</div>
+            <div class="pn">${p.n}</div>
+            <div class="pt">${p.t}</div>
+            <div class="pa">↗</div>
+          </a>
+        `
+        )
+        .join('');
+
+      const up = cs
+        .filter((c) => {
+          const d = du(c.date);
+          return d >= 0 && d <= 7;
+        })
+        .sort((a, b) => du(a.date) - du(b.date));
+
+      const el = document.getElementById('ov-up');
+      if (!up.length) {
+        el.innerHTML = '<div class="empty"><span class="ei">📅</span>NO BILLS DUE THIS WEEK</div>';
+        return;
+      }
+
+      el.innerHTML = up
+        .map((c) => {
+          const d = du(c.date);
+          const ac = d <= 3 ? 'urg' : 'wrn';
+          const av = d <= 3 ? 'ar' : 'ay';
+          const lbl = d === 0 ? 'DUE TODAY' : `DUE IN ${d}D`;
+          return `
+            <div class="brk ac ${ac}">
+              <div class="c1"></div>
+              <div class="c2"></div>
+              <div class="aava ${av}">${ini(c.name)}</div>
+              <div class="ainf">
+                <div class="an">${c.name.toUpperCase()}</div>
+                <div class="am">${lbl} · $${c.price}/mo</div>
+              </div>
+              <button class="nb" onclick="cpyMsg(${c.id})">📋</button>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function setf(el, f) {
+      document.querySelectorAll('.pill').forEach((p) => p.classList.remove('on'));
+      el.classList.add('on');
+      curF = f;
+      renderC();
+    }
+
+    function renderC() {
+      const q = (document.getElementById('csearch')?.value || '').toLowerCase();
+      let cs = [...S.customers].sort((a, b) => du(a.date) - du(b.date));
+
+      if (q) {
+        cs = cs.filter(
+          (c) => c.name.toLowerCase().includes(q) || (c.phone || '').includes(q)
+        );
+      }
+
+      if (curF) {
+        cs = cs.filter((c) => {
+          const [, , , s] = stat(du(c.date));
+          return s === curF;
+        });
+      }
+
+      const el = document.getElementById('clist');
+
+      if (!cs.length) {
+        el.innerHTML = `<div class="empty"><span class="ei">👥</span>${
+          S.customers.length === 0
+            ? 'NO CLIENTS YET\nTAP + TO ADD YOUR FIRST CLIENT'
+            : 'NO RESULTS FOUND'
+        }</div>`;
+        return;
+      }
+
+      el.innerHTML = cs
+        .map((c) => {
+          const [sc, bc, lbl] = stat(du(c.date));
+          return `
+            <div class="brk cc2 ${sc}">
+              <div class="c1"></div>
+              <div class="c2"></div>
+              <div class="ctop">
+                <div class="cname">${c.name.toUpperCase()}</div>
+                <span class="cbadge ${bc}">${lbl}</span>
+              </div>
+
+              <div class="cmeta">
+                ${c.phone ? `<span class="cm">📱 ${c.phone}</span>` : ''}
+                <span class="cm">📺 ${c.panel || '—'}</span>
+                <span class="cm">📦 ${c.pkg || '—'}</span>
+                <span class="cprice">$${c.price}/mo</span>
+              </div>
+
+              <div class="cmeta" style="margin-top:4px">
+                <span class="cm">📅 ${fd(c.date)}</span>
+                ${c.notes ? `<span class="cm">📝 ${c.notes}</span>` : ''}
+              </div>
+
+              <div class="cacts">
+                <button class="ca ren" onclick="renew(${c.id})">+1 MONTH</button>
+                <button class="ca msg" onclick="cpyMsg(${c.id})">REMIND</button>
+                <button class="ca del" onclick="del(${c.id})">REMOVE</button>
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function rA() {
+      const od = S.customers
+        .filter((c) => du(c.date) < 0)
+        .sort((a, b) => du(a.date) - du(b.date));
+
+      const wk = S.customers
+        .filter((c) => {
+          const d = du(c.date);
+          return d >= 0 && d <= 7;
+        })
+        .sort((a, b) => du(a.date) - du(b.date));
+
+      const mk = (c, cls, av) => {
+        const d = du(c.date);
+        const lbl =
+          d < 0
+            ? `${Math.abs(d)} DAY${Math.abs(d) !== 1 ? 'S' : ''} OVERDUE`
+            : d === 0
+            ? 'DUE TODAY'
+            : `DUE IN ${d} DAY${d !== 1 ? 'S' : ''}`;
+
+        return `
+          <div class="brk ac ${cls}">
+            <div class="c1"></div>
+            <div class="c2"></div>
+            <div class="aava ${av}">${ini(c.name)}</div>
+            <div class="ainf">
+              <div class="an">${c.name.toUpperCase()}</div>
+              <div class="am">${lbl} · $${c.price}/mo</div>
+              <div class="am">${c.panel || '—'}${c.phone ? ' · 📱 ' + c.phone : ''}</div>
+            </div>
+            <button class="nb" onclick="cpyMsg(${c.id})">📋</button>
+          </div>
+        `;
+      };
+
+      document.getElementById('al-o').innerHTML = od.length
+        ? od.map((c) => mk(c, 'urg', 'ar')).join('')
+        : '<div class="empty" style="padding:16px;font-size:10px">✅ NONE OVERDUE</div>';
+
+      document.getElementById('al-w').innerHTML = wk.length
+        ? wk.map((c) => mk(c, 'wrn', 'ay')).join('')
+        : '<div class="empty" style="padding:16px;font-size:10px">✅ NONE DUE THIS WEEK</div>';
+    }
+
+    function renew(id) {
+      const c = S.customers.find((x) => x.id === id);
+      if (!c) return;
+      const d = new Date(c.date);
+      d.setMonth(d.getMonth() + 1);
+      c.date = d.toISOString().split('T')[0];
+      sv();
+      toast('✅ RENEWED +1 MONTH');
+      rAll();
+    }
+
+    function del(id) {
+      if (!confirm('Remove this client?')) return;
+      S.customers = S.customers.filter((x) => x.id !== id);
+      sv();
+      rAll();
+    }
+
+    function cpyMsg(id) {
+      const c = S.customers.find((x) => x.id === id);
+      if (!c) return;
+      const d = du(c.date);
+      const when =
+        d < 0
+          ? `is ${Math.abs(d)} day${Math.abs(d) !== 1 ? 's' : ''} overdue`
+          : d === 0
+          ? 'is due today'
+          : `is due in ${d} day${d !== 1 ? 's' : ''}`;
+
+      const msg = `Hey ${
+        c.name.split(' ')[0]
+      }! 📺 Your IPTV subscription ($${c.price}/mo) ${when}. Please send payment to keep your service active. Thanks! - RockBottom TV`;
+
+      if (navigator.clipboard) {
+        navigator.clipboard
+          .writeText(msg)
+          .then(() => toast('📋 MESSAGE COPIED!'))
+          .catch(() => prompt('Copy:', msg));
+      } else {
+        prompt('Copy:', msg);
+      }
+    }
+
+    function openAdd() {
+      const d = new Date();
+      d.setMonth(d.getMonth() + 1);
+      document.getElementById('ac-dt').value = d.toISOString().split('T')[0];
+      ['ac-n', 'ac-ph', 'ac-nt'].forEach((i) => (document.getElementById(i).value = ''));
+      document.getElementById('ac-pk').value = 'Premium';
+      document.getElementById('ac-pr').value = '40';
+      document.getElementById('drw-add').classList.add('on');
+      setTimeout(() => document.getElementById('ac-n').focus(), 350);
+    }
+
+    function saveC() {
+      const name = document.getElementById('ac-n').value.trim();
+      const date = document.getElementById('ac-dt').value;
+
+      if (!name) {
+        toast('⚠ NAME REQUIRED');
+        return;
+      }
+
+      if (!date) {
+        toast('⚠ DATE REQUIRED');
+        return;
+      }
+
+      S.customers.push({
+        id: Date.now(),
+        name,
+        phone: document.getElementById('ac-ph').value.trim(),
+        panel: document.getElementById('ac-pan').value,
+        pkg: document.getElementById('ac-pk').value.trim(),
+        price: Number(document.getElementById('ac-pr').value) || 40,
+        date,
+        notes: document.getElementById('ac-nt').value.trim()
+      });
+
+      sv();
+      closeD();
+      toast('✅ CLIENT ADDED');
+      rAll();
+    }
+
+    function closeD() {
+      document.querySelectorAll('.ov').forEach((o) => o.classList.remove('on'));
+    }
+
+    function saveCreds() {
+      S.creds = {
+        ku: document.getElementById('cr-ku').value,
+        kp: document.getElementById('cr-kp').value,
+        tu: document.getElementById('cr-tu').value,
+        tp: document.getElementById('cr-tp').value,
+        su: document.getElementById('cr-su').value,
+        sp: document.getElementById('cr-sp').value
+      };
+      sv();
+      toast('✅ CREDENTIALS SAVED');
+    }
+
+    function lCr() {
+      if (!S.creds) return;
+      const m = {
+        ku: 'cr-ku',
+        kp: 'cr-kp',
+        tu: 'cr-tu',
+        tp: 'cr-tp',
+        su: 'cr-su',
+        sp: 'cr-sp'
+      };
+      Object.keys(m).forEach((k) => {
+        if (S.creds[k]) {
+          const el = document.getElementById(m[k]);
+          if (el) el.value = S.creds[k];
+        }
+      });
+    }
+
+    function expData() {
+      const b = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = 'rockbottom-backup.json';
+      a.click();
+      toast('⬇ EXPORT READY');
+    }
+
+    function impData(e) {
+      const f = e.target.files[0];
+      if (!f) return;
+
+      const r = new FileReader();
+      r.onload = (ev) => {
+        try {
+          S = JSON.parse(ev.target.result);
+          sv();
+          rAll();
+          toast('✅ DATA IMPORTED');
+        } catch (err) {
+          toast('⚠ INVALID FILE');
+        }
+      };
+      r.readAsText(f);
+    }
+
+    function rAll() {
+      rO();
+      if (curTab === 'customers') renderC();
+      if (curTab === 'alerts') rA();
+    }
+
+    rO();
+  </script>
 </body>
 </html>
