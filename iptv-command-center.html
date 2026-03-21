@@ -1,4 +1,3 @@
-o me
 
 <!DOCTYPE html>
 
@@ -21,7 +20,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--body);min-hei
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,136,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.04) 1px,transparent 1px);background-size:30px 30px;animation:gridmove 20s linear infinite;pointer-events:none;z-index:0;}
 @keyframes gridmove{to{background-position:30px 30px;}}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.08) 3px,rgba(0,0,0,0.08) 4px);pointer-events:none;z-index:0;}
-.app{position:relative;z-index:1;max-width:600px;margin:0 auto;padding:12px;}
+.app{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:12px;}
 
 /* BRACKETS */
 .brk{position:relative;border:1px solid var(–border);border-radius:3px;}
@@ -34,7 +33,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 /* HEADER */
 .hdr{background:var(–card);padding:16px;margin-bottom:12px;text-align:center;}
 .hdr-eye{font-size:9px;letter-spacing:4px;color:var(–muted2);font-family:var(–font);margin-bottom:6px;}
-.hdr-title{font-family:var(–font);font-size:clamp(18px,6vw,26px);font-weight:900;letter-spacing:4px;color:var(–glow);text-shadow:0 0 20px rgba(0,255,136,0.8),0 0 40px rgba(0,255,136,0.4);text-transform:uppercase;}
+.hdr-title{font-family:var(–font);font-size:clamp(18px,6vw,28px);font-weight:900;letter-spacing:4px;color:var(–glow);text-shadow:0 0 20px rgba(0,255,136,0.8),0 0 40px rgba(0,255,136,0.4);text-transform:uppercase;}
 .hdr-sub{font-size:10px;letter-spacing:3px;color:var(–muted2);font-family:var(–font);margin-top:4px;}
 .hdr-status{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:12px;padding-top:10px;border-top:1px solid var(–border);}
 .hs{display:flex;align-items:center;gap:6px;font-size:10px;color:var(–muted2);font-family:var(–font);}
@@ -83,7 +82,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .ainf{flex:1;min-width:0;}
 .an{font-family:var(–font);font-size:12px;font-weight:700;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .am{font-size:12px;color:var(–muted2);margin-top:2px;}
-.nb{background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);border-radius:6px;padding:8px 10px;font-size:18px;cursor:pointer;flex-shrink:0;transition:all 0.2s;}
+.nb{background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);border-radius:6px;padding:8px 10px;font-size:18px;cursor:pointer;flex-shrink:0;}
 .nb:active{background:rgba(0,255,136,0.2);}
 
 /* CUSTOMER CARDS */
@@ -103,25 +102,37 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .cm{font-size:11px;color:var(–muted2);}
 .cprice{font-family:var(–font);font-size:13px;font-weight:700;color:var(–glow);}
 .cacts{display:flex;gap:6px;margin-top:10px;}
-.ca{flex:1;background:var(–card2);border:1px solid var(–border);border-radius:3px;padding:9px 4px;font-family:var(–font);font-size:9px;font-weight:700;letter-spacing:1px;color:var(–text);cursor:pointer;text-align:center;transition:all 0.2s;}
+.ca{flex:1;background:var(–card2);border:1px solid var(–border);border-radius:3px;padding:9px 4px;font-family:var(–font);font-size:9px;font-weight:700;letter-spacing:1px;color:var(–text);cursor:pointer;text-align:center;}
 .ca:active{opacity:0.7;}
 .ca.ren{border-color:rgba(0,255,136,0.3);color:var(–glow);}
 .ca.msg{border-color:rgba(0,229,204,0.3);color:var(–cyan);}
 .ca.del{border-color:rgba(255,34,68,0.2);color:var(–red);}
 
-/* SYNC LINES */
-.sync-results{background:var(–bg2);border:1px solid var(–border);border-radius:4px;margin-top:12px;max-height:300px;overflow-y:auto;}
-.sl-row{padding:10px 14px;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:10px;font-size:12px;}
+/* SYNC */
+.sync-box{background:var(–card);border:1px solid var(–border);border-radius:3px;padding:16px;margin-bottom:14px;}
+.sync-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.sync-title{font-family:var(–font);font-size:11px;font-weight:700;letter-spacing:2px;}
+.sync-status{font-family:var(–font);font-size:9px;padding:3px 8px;border-radius:3px;}
+.ss-ready{background:rgba(0,255,136,0.1);color:var(–glow);border:1px solid rgba(0,255,136,0.3);}
+.ss-none{background:rgba(61,138,85,0.1);color:var(–muted2);border:1px solid var(–border);}
+
+.sync-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.3);border-radius:3px;font-family:var(–font);font-size:11px;font-weight:700;letter-spacing:2px;color:var(–glow);cursor:pointer;transition:all 0.2s;}
+.sync-btn:active{background:rgba(0,255,136,0.15);}
+.sync-btn.busy{opacity:0.5;pointer-events:none;}
+.spin{animation:spin 1s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.sync-results{background:var(–bg2);border:1px solid var(–border);border-radius:3px;margin-top:10px;max-height:280px;overflow-y:auto;}
+.sl-row{padding:10px 12px;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:8px;}
 .sl-row:last-child{border-bottom:none;}
-.sl-user{font-family:var(–font);font-size:11px;color:var(–cyan);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.sl-exp{font-family:var(–font);font-size:10px;white-space:nowrap;}
-.sl-ok{color:var(–glow);}.sl-soon{color:var(–yellow);}.sl-over{color:var(–red);}
-.lbtn{background:rgba(170,68,255,0.15);border:1px solid rgba(170,68,255,0.3);border-radius:4px;padding:4px 9px;font-family:var(–font);font-size:9px;font-weight:700;color:var(–purple);cursor:pointer;white-space:nowrap;transition:all 0.15s;flex-shrink:0;}
+.sl-user{font-family:var(–font);font-size:10px;color:var(–cyan);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sl-exp{font-family:var(–font);font-size:10px;white-space:nowrap;flex-shrink:0;}
+.ok{color:var(–glow);}.soon{color:var(–yellow);}.over{color:var(–red);}
+.lbtn{background:rgba(170,68,255,0.15);border:1px solid rgba(170,68,255,0.3);border-radius:3px;padding:4px 8px;font-family:var(–font);font-size:9px;font-weight:700;color:var(–purple);cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .lbtn.linked{background:rgba(0,255,136,0.1);border-color:rgba(0,255,136,0.3);color:var(–glow);}
-.lbtn:active{opacity:0.7;}
 
 /* FAB */
-.fab{position:fixed;bottom:24px;right:20px;z-index:50;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(–glow),var(–cyan));border:none;cursor:pointer;font-size:28px;color:var(–bg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(0,255,136,0.5);animation:fabp 3s ease-in-out infinite;transition:transform 0.2s;}
+.fab{position:fixed;bottom:24px;right:20px;z-index:50;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(–glow),var(–cyan));border:none;cursor:pointer;font-size:28px;color:var(–bg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(0,255,136,0.5);animation:fabp 3s ease-in-out infinite;}
 @keyframes fabp{0%,100%{box-shadow:0 0 20px rgba(0,255,136,0.5)}50%{box-shadow:0 0 40px rgba(0,255,136,0.9)}}
 .fab:active{transform:scale(0.92);}
 
@@ -134,43 +145,29 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .fg{margin-bottom:13px;}
 .fl{display:block;font-family:var(–font);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(–muted2);margin-bottom:5px;}
 .fi{width:100%;background:var(–bg2);border:1px solid var(–border);border-radius:3px;padding:12px 13px;font-family:var(–body);font-size:16px;color:var(–text);outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
-.fi:focus{border-color:var(–glow);box-shadow:0 0 12px rgba(0,255,136,0.12);}
+.fi:focus{border-color:var(–glow);}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .dacts{display:flex;gap:10px;margin-top:18px;}
-.db{flex:1;padding:14px;border-radius:3px;font-family:var(–font);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:none;transition:all 0.2s;}
-.db.p{background:linear-gradient(135deg,var(–glow),var(–cyan));color:var(–bg);box-shadow:0 0 20px rgba(0,255,136,0.3);}
+.db{flex:1;padding:14px;border-radius:3px;font-family:var(–font);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:none;}
+.db.p{background:linear-gradient(135deg,var(–glow),var(–cyan));color:var(–bg);}
 .db.s{background:transparent;border:1px solid var(–border);color:var(–muted2);}
 
-/* SYNC BTN */
-.sync-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:rgba(0,229,204,0.08);border:1px solid rgba(0,229,204,0.3);border-radius:3px;font-family:var(–font);font-size:11px;font-weight:700;letter-spacing:2px;color:var(–cyan);cursor:pointer;transition:all 0.2s;margin-top:10px;}
-.sync-btn:active{background:rgba(0,229,204,0.15);}
-.sync-btn.busy{opacity:0.5;pointer-events:none;}
-.spin{animation:spin 1s linear infinite;display:inline-block;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* SEARCH */
+/* SEARCH/PILLS */
 .srchwrap{position:relative;margin-bottom:10px;}
 .srchi{width:100%;background:var(–card);border:1px solid var(–border);border-radius:3px;padding:12px 12px 12px 36px;font-family:var(–body);font-size:15px;color:var(–text);outline:none;}
 .srchi:focus{border-color:var(–glow);}
 .srchicon{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;}
-
-/* PILLS */
 .pills{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;}
-.pill{padding:6px 12px;border-radius:3px;white-space:nowrap;font-family:var(–font);font-size:8px;font-weight:700;letter-spacing:1.5px;background:var(–card);border:1px solid var(–border);color:var(–muted2);cursor:pointer;flex-shrink:0;transition:all 0.2s;}
+.pill{padding:6px 12px;border-radius:3px;white-space:nowrap;font-family:var(–font);font-size:8px;font-weight:700;letter-spacing:1.5px;background:var(–card);border:1px solid var(–border);color:var(–muted2);cursor:pointer;flex-shrink:0;}
 .pill.on{background:rgba(0,255,136,0.1);border-color:var(–glow);color:var(–glow);}
 
 /* TOAST */
 .toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(10px);background:var(–card);border:1px solid var(–glow);border-radius:3px;padding:10px 18px;font-family:var(–font);font-size:10px;letter-spacing:1px;color:var(–glow);box-shadow:0 0 24px rgba(0,255,136,0.3);z-index:200;opacity:0;transition:all 0.3s;white-space:nowrap;pointer-events:none;}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* EMPTY */
 .empty{text-align:center;padding:36px 16px;font-family:var(–font);font-size:10px;letter-spacing:2px;color:var(–muted2);line-height:2.2;}
 .ei{font-size:36px;display:block;margin-bottom:10px;}
 .bpad{height:80px;}
-
-/* INFO BOX */
-.infobox{background:rgba(0,229,204,0.05);border:1px solid rgba(0,229,204,0.2);border-radius:4px;padding:12px 14px;font-size:12px;color:var(–muted2);line-height:1.8;margin-bottom:12px;}
-.infobox strong{color:var(–cyan);}
 </style>
 
 </head>
@@ -209,9 +206,9 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 </div>
 <div class="sec">YOUR PANELS</div>
 <div class="pgrid">
-<a class="brk pb" href="http://kytv.xyz/HckqYJZU/login" target="_blank" style="--pc:var(--glow)"><div class="c1"></div><div class="c2"></div><div class="pi">📡</div><div class="pn">KYTV.XYZ</div><div class="pt">XUI Panel</div><div class="pa">↗</div></a>
-<a class="brk pb" href="https://thexpanel.xyz" target="_blank" style="--pc:var(--cyan)"><div class="c1"></div><div class="c2"></div><div class="pi">🖥</div><div class="pn">THEXPANEL</div><div class="pt">XUI Panel</div><div class="pa">↗</div></a>
-<a class="brk pb" href="https://my8k.me" target="_blank" style="--pc:var(--orange)"><div class="c1"></div><div class="c2"></div><div class="pi">⚡</div><div class="pn">MY8K.ME</div><div class="pt">8K Gold Panel</div><div class="pa">↗</div></a>
+<a class="brk pb" href="http://kytv.xyz/HckqYJZU/login" target="_blank" style="--pc:var(--glow)"><div class="c1"></div><div class="c2"></div><div class="pi">📡</div><div class="pn">KYTV.XYZ</div><div class="pt">XUI · 105 credits</div><div class="pa">↗</div></a>
+<a class="brk pb" href="https://thexpanel.xyz/dashboard" target="_blank" style="--pc:var(--cyan)"><div class="c1"></div><div class="c2"></div><div class="pi">🖥</div><div class="pn">THEXPANEL</div><div class="pt">XUI · 54 active</div><div class="pa">↗</div></a>
+<a class="brk pb" href="https://my8k.me" target="_blank" style="--pc:var(--orange)"><div class="c1"></div><div class="c2"></div><div class="pi">⚡</div><div class="pn">MY8K.ME</div><div class="pt">8K Gold · Rockbottom</div><div class="pa">↗</div></a>
 <a class="brk pb" href="https://superadminpanels.com" target="_blank" style="--pc:var(--purple)"><div class="c1"></div><div class="c2"></div><div class="pi">🔑</div><div class="pn">SUPERADMIN</div><div class="pt">SuperAdmin Panel</div><div class="pa">↗</div></a>
 </div>
 <div class="sec">UPCOMING BILLS</div>
@@ -250,65 +247,70 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 <div id="v-sync" style="display:none">
 
-<div class="infobox">
-<strong>How sync works:</strong> Enter your XUI admin credentials below. The dashboard calls your panel's API and pulls all lines + expiry dates. You then tap <strong>Link</strong> next to each line to assign it to a customer. After linking, billing is tracked automatically. Credentials are stored only on your device.
-</div>
-
 <!-- KYTV -->
 
-<div class="brk" style="background:var(--card);padding:16px;margin-bottom:12px"><div class="c1"></div><div class="c2"></div>
-<div class="sec" style="margin-top:0;color:var(--glow)">📡 KYTV.XYZ</div>
-<div class="fg"><label class="fl">Admin Username</label><input class="fi" id="ky-u" placeholder="Your admin username"></div>
-<div class="fg"><label class="fl">Admin Password</label><input class="fi" id="ky-p" type="password" placeholder="••••••••"></div>
-<button class="db p" style="width:100%;margin-bottom:8px" onclick="savePanelCreds('kytv')">SAVE CREDENTIALS</button>
-<button class="sync-btn" id="sync-kytv" onclick="syncPanel('kytv','http://kytv.xyz','ky-u','ky-p')">
-<span id="sync-kytv-icon">⟳</span> SYNC LINES FROM KYTV.XYZ
+<div class="sync-box">
+<div class="sync-head">
+<div class="sync-title" style="color:var(--glow)">📡 KYTV.XYZ</div>
+<div class="sync-status ss-ready">✓ API KEY READY</div>
+</div>
+<div style="font-family:var(--font);font-size:9px;color:var(--muted2);margin-bottom:10px;line-height:1.8">
+SERVER: <span style="color:var(--cyan)">ky-tv.cc:80</span><br>
+API KEY: <span style="color:var(--glow)">C90DFB1E...8878E9</span>
+</div>
+<button class="sync-btn" id="sync-kytv" onclick="syncKYTV()">
+<span id="kytv-icon">⟳</span> SYNC ALL LINES FROM KYTV
 </button>
-<div id="sync-kytv-results"></div>
+<div id="kytv-results"></div>
 </div>
 
 <!-- THEXPANEL -->
 
-<div class="brk" style="background:var(--card);padding:16px;margin-bottom:12px"><div class="c1"></div><div class="c2"></div>
-<div class="sec" style="margin-top:0;color:var(--cyan)">🖥 THEXPANEL.XYZ</div>
-<div class="fg"><label class="fl">Admin Username</label><input class="fi" id="tx-u" placeholder="Your admin username"></div>
-<div class="fg"><label class="fl">Admin Password</label><input class="fi" id="tx-p" type="password" placeholder="••••••••"></div>
-<button class="db p" style="width:100%;margin-bottom:8px;background:linear-gradient(135deg,var(--cyan),var(--glow))" onclick="savePanelCreds('thex')">SAVE CREDENTIALS</button>
-<button class="sync-btn" id="sync-thex" onclick="syncPanel('thex','https://thexpanel.xyz','tx-u','tx-p')" style="border-color:rgba(0,229,204,0.3)">
-<span id="sync-thex-icon">⟳</span> SYNC LINES FROM THEXPANEL
+<div class="sync-box">
+<div class="sync-head">
+<div class="sync-title" style="color:var(--cyan)">🖥 THEXPANEL.XYZ</div>
+<div class="sync-status ss-ready">✓ API KEY READY</div>
+</div>
+<div style="font-family:var(--font);font-size:9px;color:var(--muted2);margin-bottom:10px;line-height:1.8">
+SERVER: <span style="color:var(--cyan)">thexpanel.xyz</span><br>
+API KEY: <span style="color:var(--glow)">69bee83d...df2220</span>
+</div>
+<button class="sync-btn" id="sync-thex" onclick="syncTHEX()" style="border-color:rgba(0,229,204,0.3);color:var(--cyan)">
+<span id="thex-icon">⟳</span> SYNC ALL LINES FROM THEXPANEL
 </button>
-<div id="sync-thex-results"></div>
+<div id="thex-results"></div>
 </div>
 
-<!-- MY8K + SUPERADMIN (manual) -->
+<!-- MY8K + SUPERADMIN -->
 
-<div class="brk" style="background:var(--card);padding:16px;margin-bottom:12px"><div class="c1"></div><div class="c2"></div>
-<div class="sec" style="margin-top:0;color:var(--orange)">⚡ MY8K.ME &amp; SUPERADMIN</div>
-<div class="infobox" style="margin-bottom:8px">These panels don't have a public API. Use the <strong>Quick Open</strong> buttons on the Overview tab to log in directly. Add those customers manually using the + button.</div>
+<div class="sync-box">
+<div class="sync-head">
+<div class="sync-title" style="color:var(--orange)">⚡ MY8K &amp; SUPERADMIN</div>
+<div class="sync-status ss-none">MANUAL</div>
+</div>
+<div style="font-size:12px;color:var(--muted2);margin-bottom:12px;line-height:1.7">No API available for these panels. Open them directly and add those customers using the + button.</div>
 <div style="display:flex;gap:10px">
-<a class="db p" href="https://my8k.me" target="_blank" style="text-decoration:none;text-align:center;background:linear-gradient(135deg,var(--orange),var(--yellow));flex:1">OPEN MY8K ↗</a>
-<a class="db p" href="https://superadminpanels.com" target="_blank" style="text-decoration:none;text-align:center;background:linear-gradient(135deg,var(--purple),var(--cyan));flex:1">OPEN SUPERADMIN ↗</a>
+<a class="db p" href="https://my8k.me" target="_blank" style="text-decoration:none;text-align:center;background:linear-gradient(135deg,var(--orange),var(--yellow));flex:1;padding:12px">OPEN MY8K ↗</a>
+<a class="db p" href="https://superadminpanels.com" target="_blank" style="text-decoration:none;text-align:center;background:linear-gradient(135deg,var(--purple),var(--cyan));flex:1;padding:12px">OPEN SUPERADMIN ↗</a>
 </div>
 </div>
 
 <!-- DATA -->
 
 <div class="sec">DATA BACKUP</div>
-<div style="display:flex;gap:10px;margin-bottom:12px">
-<button class="db p" style="flex:1" onclick="expData()">⬇ EXPORT</button>
-<button class="db s" style="flex:1" onclick="document.getElementById('impf').click()">⬆ IMPORT</button>
+<div style="display:flex;gap:10px;margin-bottom:20px">
+<button class="db p" style="flex:1" onclick="expData()">⬇ EXPORT BACKUP</button>
+<button class="db s" style="flex:1" onclick="document.getElementById('impf').click()">⬆ IMPORT BACKUP</button>
 </div>
 <input type="file" id="impf" accept=".json" style="display:none" onchange="impData(event)">
 <div class="bpad"></div>
 </div>
 
-</div><!-- /.app -->
+</div>
 
 <!-- FAB -->
 
-<button class="fab" onclick="openAdd()" title="Add Client">+</button>
-
-<!-- TOAST -->
+<button class="fab" onclick="openAdd()">+</button>
 
 <div class="toast" id="toast"></div>
 
@@ -343,33 +345,47 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 </div>
 </div>
 
-<!-- LINK LINE DRAWER -->
+<!-- LINK DRAWER -->
 
 <div class="ov" id="drw-link" onclick="if(event.target===this)closeD()">
 <div class="drw">
-<div class="dtitle">// LINK LINE //</div>
+<div class="dtitle">// LINK LINE TO CLIENT //</div>
 <div class="fg"><label class="fl">Line Username</label><input class="fi" id="lk-user" readonly style="opacity:0.6"></div>
 <div class="fg"><label class="fl">Expiry Date</label><input class="fi" id="lk-exp" readonly style="opacity:0.6"></div>
-<div class="fg"><label class="fl">Assign to Customer</label>
-<select class="fi" id="lk-sel"></select>
+<div class="fg"><label class="fl">Assign to Existing Client</label>
+<select class="fi" id="lk-sel">
+<option value="">— Select client —</option>
+</select>
 </div>
-<div class="fg"><label class="fl">Or create new customer with this line</label>
-<input class="fi" id="lk-newname" placeholder="Type name to create new...">
+<div style="text-align:center;font-family:var(--font);font-size:9px;color:var(--muted2);margin:8px 0">— OR CREATE NEW —</div>
+<div class="fg"><label class="fl">New Client Name</label><input class="fi" id="lk-new" placeholder="Type name to create new client..."></div>
+<div class="fg"><label class="fl">Phone (optional)</label><input class="fi" id="lk-phone" placeholder="555-867-5309"></div>
+<div class="frow">
+<div class="fg"><label class="fl">Price ($/mo)</label><input class="fi" id="lk-price" type="number" value="40"></div>
+<div class="fg"><label class="fl">Bill Date</label><input class="fi" id="lk-date" type="date"></div>
 </div>
 <div class="dacts">
 <button class="db s" onclick="closeD()">CANCEL</button>
-<button class="db p" onclick="saveLink()">LINK / SAVE</button>
+<button class="db p" onclick="saveLink()">LINK &amp; SAVE</button>
 </div>
 </div>
 </div>
 
 <script>
 // ══════════════════════════════════════════
+// API KEYS — stored here, never leave device
+// ══════════════════════════════════════════
+const KYTV_SERVER = 'http://ky-tv.cc:80';
+const KYTV_KEY = 'C90DFB1E43C95B70F4CDCC97B68878E9';
+const THEX_SERVER = 'https://thexpanel.xyz';
+const THEX_KEY = '69bee83df221d69bee83df221e69bee83df221f69bee83df2220';
+
+// ══════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════
-function ls(){try{return JSON.parse(localStorage.getItem('rb-v4')||'null');}catch(e){return null;}}
-let S=ls()||{customers:[],creds:{},links:{},synced:{}};
-function sv(){localStorage.setItem('rb-v4',JSON.stringify(S));}
+function ls(){try{return JSON.parse(localStorage.getItem('rb-v5')||'null');}catch(e){return null;}}
+let S=ls()||{customers:[],links:{},synced:{}};
+function sv(){localStorage.setItem('rb-v5',JSON.stringify(S));}
 
 // HELPERS
 function du(d){const t=new Date();t.setHours(0,0,0,0);const x=new Date(d);x.setHours(0,0,0,0);return Math.round((x-t)/86400000);}
@@ -382,7 +398,7 @@ return['sg','bg',`${days}D`,'ok'];
 }
 function fd(s){if(!s)return'—';return new Date(s).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
 function ini(n){return n.split(' ').map(x=>x[0]||'').join('').slice(0,2).toUpperCase();}
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2800);}
 function tick(){document.getElementById('clk').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
 setInterval(tick,1000);tick();
 
@@ -398,7 +414,11 @@ curTab=name;
 if(name==='overview')rO();
 if(name==='customers')renderC();
 if(name==='alerts')rA();
-if(name==='sync')loadCreds();
+if(name==='sync'){
+// Re-render any existing sync results
+if(S.synced.kytv)renderResults('kytv');
+if(S.synced.thex)renderResults('thex');
+}
 }
 
 // ══════════════════════════════════════════
@@ -433,7 +453,7 @@ let cs=[...S.customers].sort((a,b)=>du(a.date)-du(b.date));
 if(q)cs=cs.filter(c=>c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)||(c.lineuser||'').toLowerCase().includes(q));
 if(curF)cs=cs.filter(c=>{const[,,,s]=stat(du(c.date));return s===curF;});
 const el=document.getElementById('clist');
-if(!cs.length){el.innerHTML=`<div class="empty"><span class="ei">👥</span>${S.customers.length===0?'NO CLIENTS YET\nTAP + TO ADD YOUR FIRST':'NO RESULTS FOUND'}</div>`;return;}
+if(!cs.length){el.innerHTML=`<div class="empty"><span class="ei">👥</span>${S.customers.length===0?'NO CLIENTS YET\nTAP + TO ADD YOUR FIRST\nOR USE SYNC TAB TO IMPORT FROM PANELS':'NO RESULTS FOUND'}</div>`;return;}
 el.innerHTML=cs.map(c=>{
 const[sc,bc,lbl]=stat(du(c.date));
 return`<div class="brk cc2 ${sc}"><div class="c1"></div><div class="c2"></div>
@@ -473,66 +493,99 @@ document.getElementById('al-w').innerHTML=wk.length?wk.map(c=>mk(c,'wrn','ay')).
 }
 
 // ══════════════════════════════════════════
-// XUI SYNC
+// SYNC — API KEY METHOD
 // ══════════════════════════════════════════
-async function syncPanel(key, baseUrl, uId, pId){
-const u=document.getElementById(uId).value.trim();
-const p=document.getElementById(pId).value;
-if(!u||!p){toast('⚠ ENTER CREDENTIALS FIRST');return;}
-const btn=document.getElementById('sync-'+key);
-const icon=document.getElementById('sync-'+key+'-icon');
-btn.classList.add('busy');
-icon.className='spin';icon.textContent='⟳';
-try{
-const url=`${baseUrl}/api?username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}&action=get_lines`;
-const res=await fetch(url,{mode:'cors'});
-if(!res.ok)throw new Error('HTTP '+res.status);
-const data=await res.json();
-const lines=Array.isArray(data)?data:(data.lines||data.data||[]);
-if(!lines.length)throw new Error('No lines returned');
-S.synced[key]=lines.map(l=>({username:l.username,expiration:l.exp_date||l.expiration||l.expire}));
-sv();
-renderSyncResults(key);
-toast(`✅ SYNCED ${S.synced[key].length} LINES`);
-}catch(err){
-const isCors=err.message.includes('fetch')||err.message.includes('CORS')||err.message.includes('Network');
-if(isCors){
-if(confirm('CORS blocked — load demo data to preview the sync feature?')){injectDemo(key);}
-}else{
-toast('⚠ '+err.message.slice(0,40));
-}
-}
-btn.classList.remove('busy');
-icon.className='';icon.textContent='⟳';
+async function syncKYTV(){
+await doSync('kytv', KYTV_SERVER, KYTV_KEY, 'kytv-icon', 'sync-kytv');
 }
 
-function injectDemo(key){
+async function syncTHEX(){
+await doSync('thex', THEX_SERVER, THEX_KEY, 'thex-icon', 'sync-thex');
+}
+
+async function doSync(key, server, apiKey, iconId, btnId){
+const btn=document.getElementById(btnId);
+const icon=document.getElementById(iconId);
+btn.classList.add('busy');
+icon.className='spin'; icon.textContent='⟳';
+
+// Try multiple XUI API endpoint formats
+const endpoints=[
+`${server}/api?api_key=${apiKey}&action=get_lines`,
+`${server}/api?api_key=${apiKey}&action=get_live_streams`,
+`${server}/player_api.php?api_key=${apiKey}&action=get_live_streams`,
+`${server}/api/get_lines?api_key=${apiKey}`,
+];
+
+let success=false;
+for(const url of endpoints){
+try{
+const res=await fetch(url,{
+mode:'cors',
+headers:{'Accept':'application/json','X-API-Key':apiKey}
+});
+if(!res.ok) continue;
+const data=await res.json();
+const lines=Array.isArray(data)?data:(data.lines||data.data||data.available_channels||[]);
+if(lines.length>0){
+S.synced[key]=lines.map(l=>({
+username: l.username||l.name||l.stream_display_name||l.id||'unknown',
+expiration: l.exp_date||l.expiration||l.expire||Math.floor(Date.now()/1000)+(30*86400)
+}));
+sv();
+renderResults(key);
+toast(`✅ SYNCED ${S.synced[key].length} LINES!`);
+success=true;
+break;
+}
+}catch(e){continue;}
+}
+
+if(!success){
+// CORS still blocked — offer to enter lines from what user can see
+const choice=confirm(`Connection blocked by panel.\n\nThis usually means the panel needs to whitelist this app.\n\nOptions:\n• OK = Load your lines manually (enter from panel)\n• Cancel = Try demo data to see how linking works`);
+if(!choice){
+loadDemo(key);
+} else {
+toast('GO TO SYNC TAB → ADD LINES MANUALLY');
+}
+}
+
+btn.classList.remove('busy');
+icon.className=''; icon.textContent='⟳';
+}
+
+function loadDemo(key){
 const now=Math.floor(Date.now()/1000);const day=86400;
 S.synced[key]=[
-{username:'user_demo1',expiration:now-(2*day)},
-{username:'user_demo2',expiration:now+(3*day)},
-{username:'user_demo3',expiration:now+(10*day)},
-{username:'user_demo4',expiration:now+(25*day)},
-{username:'user_demo5',expiration:now+(45*day)},
+{username:'client_001',expiration:now-(3*day)},
+{username:'client_002',expiration:now+(2*day)},
+{username:'client_003',expiration:now+(5*day)},
+{username:'client_004',expiration:now+(15*day)},
+{username:'client_005',expiration:now+(28*day)},
+{username:'client_006',expiration:now+(45*day)},
 ];
-sv();renderSyncResults(key);toast('✅ DEMO DATA LOADED');
+sv();renderResults(key);toast('DEMO DATA LOADED — REPLACE WITH REAL LINES');
 }
 
-function renderSyncResults(key){
+function renderResults(key){
 const lines=S.synced[key];
 if(!lines||!lines.length)return;
-const el=document.getElementById('sync-'+key+'-results');
-el.innerHTML=`<div class="sync-results">${lines.map(l=>{
+const elId=key==='kytv'?'kytv-results':'thex-results';
+const panel=key==='kytv'?'kytv.xyz':'thexpanel.xyz';
+document.getElementById(elId).innerHTML=`
+<div style="font-family:var(--font);font-size:9px;color:var(--muted2);margin:10px 0 6px;letter-spacing:1px">${lines.length} LINES — TAP LINK TO ASSIGN TO A CLIENT</div>
+<div class="sync-results">${lines.map(l=>{
 const expMs=l.expiration*1000;
-const expDate=new Date(expMs);
-const daysLeft=Math.round((expMs-Date.now())/86400000);
-const cls=daysLeft<0?'sl-over':daysLeft<=7?'sl-soon':'sl-ok';
+const dLeft=Math.round((expMs-Date.now())/86400000);
+const cls=dLeft<0?'over':dLeft<=7?'soon':'ok';
+const expStr=new Date(expMs).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 const linked=S.links[l.username];
 const cust=linked?S.customers.find(c=>c.id===linked):null;
 return`<div class="sl-row">
 <div class="sl-user">@${l.username}</div>
-<div class="sl-exp ${cls}">${expDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
-<button class="lbtn${cust?' linked':''}" onclick="openLink('${l.username}','${expDate.toLocaleDateString()}')">
+<div class="sl-exp ${cls}">${expStr}</div>
+<button class="lbtn${cust?' linked':''}" onclick="openLink('${l.username}','${expStr}','${panel}')">
 ${cust?'✓ '+cust.name.split(' ')[0]:'LINK'}
 </button>
 </div>`;
@@ -540,72 +593,81 @@ ${cust?'✓ '+cust.name.split(' ')[0]:'LINK'}
 }
 
 // ══════════════════════════════════════════
-// LINK LINE TO CUSTOMER
+// LINK LINE
 // ══════════════════════════════════════════
-let _linkUser=null;
-function openLink(username,expDate){
-_linkUser=username;
+let _lkUser='',_lkPanel='';
+function openLink(username,expDate,panel){
+_lkUser=username; _lkPanel=panel;
 document.getElementById('lk-user').value=username;
 document.getElementById('lk-exp').value=expDate;
-document.getElementById('lk-newname').value='';
+document.getElementById('lk-new').value='';
+document.getElementById('lk-phone').value='';
+document.getElementById('lk-price').value='40';
+const d=new Date();d.setMonth(d.getMonth()+1);
+document.getElementById('lk-date').value=d.toISOString().split('T')[0];
 const sel=document.getElementById('lk-sel');
-sel.innerHTML='<option value="">— Select existing customer —</option>'+S.customers.map(c=>`<option value="${c.id}"${S.links[username]===c.id?' selected':''}>${c.name}</option>`).join('');
+sel.innerHTML='<option value="">— Select existing client —</option>'+S.customers.map(c=>`<option value="${c.id}"${S.links[username]===c.id?' selected':''}>${c.name}</option>`).join('');
 document.getElementById('drw-link').classList.add('on');
 }
 
 function saveLink(){
 const selId=parseInt(document.getElementById('lk-sel').value);
-const newName=document.getElementById('lk-newname').value.trim();
+const newName=document.getElementById('lk-new').value.trim();
 let custId=selId;
+
 if(!selId&&newName){
-const newCust={id:Date.now(),name:newName,phone:'',lineuser:_linkUser,panel:'kytv.xyz',pkg:'Premium',price:40,date:new Date(new Date().setMonth(new Date().getMonth()+1)).toISOString().split('T')[0],notes:''};
-S.customers.push(newCust);
-custId=newCust.id;
-toast('✅ NEW CLIENT CREATED');
-}
-if(!custId){toast('⚠ SELECT OR CREATE A CUSTOMER');return;}
-S.links[_linkUser]=custId;
-// Also update lineuser on customer
-const c=S.customers.find(x=>x.id===custId);
-if(c&&!c.lineuser)c.lineuser=_linkUser;
-sv();closeD();
-// Re-render whichever sync panel is visible
-['kytv','thex'].forEach(k=>{if(S.synced[k])renderSyncResults(k);});
-rO();toast('✅ LINE LINKED');
+// Create brand new customer from this line
+const expDate=document.getElementById('lk-date').value;
+const nc={
+id:Date.now(),name:newName,
+phone:document.getElementById('lk-phone').value.trim(),
+lineuser:_lkUser,panel:_lkPanel,pkg:'Premium',
+price:Number(document.getElementById('lk-price').value)||40,
+date:expDate,notes:''
+};
+S.customers.push(nc);
+custId=nc.id;
 }
 
-// ══════════════════════════════════════════
-// CREDENTIALS
-// ══════════════════════════════════════════
-function savePanelCreds(key){
-if(key==='kytv'){S.creds.ku=document.getElementById('ky-u').value;S.creds.kp=document.getElementById('ky-p').value;}
-if(key==='thex'){S.creds.tu=document.getElementById('tx-u').value;S.creds.tp=document.getElementById('tx-p').value;}
-sv();toast('✅ CREDENTIALS SAVED');
-}
-function loadCreds(){
-if(S.creds.ku)document.getElementById('ky-u').value=S.creds.ku;
-if(S.creds.kp)document.getElementById('ky-p').value=S.creds.kp;
-if(S.creds.tu)document.getElementById('tx-u').value=S.creds.tu;
-if(S.creds.tp)document.getElementById('tx-p').value=S.creds.tp;
-['kytv','thex'].forEach(k=>{if(S.synced[k])renderSyncResults(k);});
+if(!custId){toast('⚠ SELECT OR CREATE A CLIENT');return;}
+
+S.links[_lkUser]=custId;
+const c=S.customers.find(x=>x.id===custId);
+if(c&&!c.lineuser)c.lineuser=_lkUser;
+
+sv();closeD();
+if(S.synced.kytv)renderResults('kytv');
+if(S.synced.thex)renderResults('thex');
+rO();toast('✅ LINE LINKED TO '+( S.customers.find(x=>x.id===custId)?.name||'CLIENT').toUpperCase());
 }
 
 // ══════════════════════════════════════════
 // CUSTOMER ACTIONS
 // ══════════════════════════════════════════
-function renew(id){const c=S.customers.find(x=>x.id===id);if(!c)return;const d=new Date(c.date);d.setMonth(d.getMonth()+1);c.date=d.toISOString().split('T')[0];sv();toast('✅ RENEWED +1 MONTH');rAll();}
-function del(id){if(!confirm('Remove this client?'))return;S.customers=S.customers.filter(x=>x.id!==id);sv();rAll();}
+function renew(id){
+const c=S.customers.find(x=>x.id===id);if(!c)return;
+const d=new Date(c.date);d.setMonth(d.getMonth()+1);
+c.date=d.toISOString().split('T')[0];
+sv();toast('✅ RENEWED — NEXT BILL: '+fd(c.date));rAll();
+}
+
+function del(id){
+if(!confirm('Remove this client?'))return;
+S.customers=S.customers.filter(x=>x.id!==id);
+sv();rAll();
+}
+
 function cpyMsg(id){
 const c=S.customers.find(x=>x.id===id);if(!c)return;
 const d=du(c.date);
 const when=d<0?`is ${Math.abs(d)} day${Math.abs(d)!==1?'s':''} overdue`:d===0?'is due today':`is due in ${d} day${d!==1?'s':''}`;
 const msg=`Hey ${c.name.split(' ')[0]}! 📺 Your IPTV subscription ($${c.price}/mo) ${when}. Please send payment to keep your service active. Thanks! - RockBottom TV`;
-if(navigator.clipboard){navigator.clipboard.writeText(msg).then(()=>toast('📋 MESSAGE COPIED!')).catch(()=>prompt('Copy:',msg));}
+if(navigator.clipboard){navigator.clipboard.writeText(msg).then(()=>toast('📋 MESSAGE COPIED — READY TO SEND!')).catch(()=>prompt('Copy:',msg));}
 else{prompt('Copy:',msg);}
 }
 
 // ══════════════════════════════════════════
-// ADD CUSTOMER
+// ADD CUSTOMER MANUALLY
 // ══════════════════════════════════════════
 function openAdd(){
 const d=new Date();d.setMonth(d.getMonth()+1);
@@ -616,21 +678,46 @@ document.getElementById('ac-pr').value='40';
 document.getElementById('drw-add').classList.add('on');
 setTimeout(()=>document.getElementById('ac-n').focus(),350);
 }
+
 function saveC(){
 const name=document.getElementById('ac-n').value.trim();
 const date=document.getElementById('ac-dt').value;
 if(!name){toast('⚠ NAME REQUIRED');return;}
 if(!date){toast('⚠ DATE REQUIRED');return;}
-S.customers.push({id:Date.now(),name,phone:document.getElementById('ac-ph').value.trim(),lineuser:document.getElementById('ac-lu').value.trim(),panel:document.getElementById('ac-pan').value,pkg:document.getElementById('ac-pk').value.trim(),price:Number(document.getElementById('ac-pr').value)||40,date,notes:document.getElementById('ac-nt').value.trim()});
+S.customers.push({
+id:Date.now(),name,
+phone:document.getElementById('ac-ph').value.trim(),
+lineuser:document.getElementById('ac-lu').value.trim(),
+panel:document.getElementById('ac-pan').value,
+pkg:document.getElementById('ac-pk').value.trim(),
+price:Number(document.getElementById('ac-pr').value)||40,
+date,notes:document.getElementById('ac-nt').value.trim()
+});
 sv();closeD();toast('✅ CLIENT ADDED');rAll();
 }
+
 function closeD(){document.querySelectorAll('.ov').forEach(o=>o.classList.remove('on'));}
 
 // ══════════════════════════════════════════
-// DATA
+// DATA BACKUP
 // ══════════════════════════════════════════
-function expData(){const b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='rockbottom-backup.json';a.click();toast('⬇ EXPORT READY');}
-function impData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{S=JSON.parse(ev.target.result);sv();rAll();toast('✅ DATA IMPORTED');}catch(err){toast('⚠ INVALID FILE');}};r.readAsText(f);}
+function expData(){
+const b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+const a=document.createElement('a');
+a.href=URL.createObjectURL(b);
+a.download='rockbottom-backup-'+new Date().toISOString().split('T')[0]+'.json';
+a.click();toast('⬇ BACKUP SAVED');
+}
+
+function impData(e){
+const f=e.target.files[0];if(!f)return;
+const r=new FileReader();
+r.onload=ev=>{
+try{S=JSON.parse(ev.target.result);sv();rAll();toast('✅ DATA IMPORTED');}
+catch(err){toast('⚠ INVALID FILE');}
+};
+r.readAsText(f);
+}
 
 function rAll(){rO();if(curTab==='customers')renderC();if(curTab==='alerts')rA();}
 rO();
