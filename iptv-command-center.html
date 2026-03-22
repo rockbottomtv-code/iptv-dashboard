@@ -1,11 +1,33 @@
+Conversation opened. 1 unread message.
+
+Skip to content
+Using Gmail with screen readers
+in:sent 
+1 of 1,369
+(no subject)
+Inbox
+
+Ben Nelson <nadjusters@gmail.com>
+2:24 PM (0 minutes ago)
+to me
 
 <!DOCTYPE html>
 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>IPTV Command Center</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="IPTV OPS">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#050e08">
+<title>IPTV OPS CENTER</title>
+
+<!-- iPhone Home Screen Icon -->
+
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23050e08'/%3E%3Ctext y='55' x='50' text-anchor='middle' font-size='50' font-family='monospace' fill='%2300ff88'%3E📡%3C/text%3E%3C/svg%3E">
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -14,206 +36,218 @@
 --red:#ff2244;--yellow:#ffcc00;--orange:#ff8800;--purple:#aa44ff;
 --text:#ccffe0;--muted:#2a6640;--muted2:#3d8a55;
 --font:'Orbitron',monospace;--body:'Rajdhani',sans-serif;
+--safe-top: env(safe-area-inset-top);
+--safe-bottom: env(safe-area-inset-bottom);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;overflow-x:hidden;}
+html{height:100%;background:var(--bg);}
+body{
+background:var(--bg);color:var(--text);font-family:var(--body);
+min-height:100vh;min-height:-webkit-fill-available;
+overflow-x:hidden;
+padding-top:var(--safe-top);
+}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,136,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.04) 1px,transparent 1px);background-size:30px 30px;animation:gridmove 20s linear infinite;pointer-events:none;z-index:0;}
 @keyframes gridmove{to{background-position:30px 30px;}}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.08) 3px,rgba(0,0,0,0.08) 4px);pointer-events:none;z-index:0;}
-.app{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:12px;}
+
+/* LAYOUT */
+.app{position:relative;z-index:1;max-width:600px;margin:0 auto;padding:10px 12px;padding-bottom:calc(80px + var(–safe-bottom));}
+
+/* BOTTOM NAV - iPhone app style */
+.bottom-nav{
+position:fixed;bottom:0;left:0;right:0;z-index:50;
+background:rgba(5,14,8,0.95);
+backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+border-top:1px solid var(–border);
+display:flex;
+padding-bottom:var(–safe-bottom);
+}
+.nav-btn{
+flex:1;padding:10px 4px 8px;background:transparent;border:none;
+display:flex;flex-direction:column;align-items:center;gap:3px;
+cursor:pointer;position:relative;transition:all 0.2s;
+}
+.nav-icon{font-size:22px;line-height:1;}
+.nav-label{font-family:var(–font);font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(–muted2);}
+.nav-btn.on .nav-label{color:var(–glow);}
+.nav-btn.on .nav-icon{filter:drop-shadow(0 0 6px var(–glow));}
+.nav-btn.on::after{content:’’;position:absolute;top:0;left:20%;right:20%;height:2px;background:var(–glow);box-shadow:0 0 8px var(–glow);}
+.nav-badge{position:absolute;top:6px;right:calc(50% - 18px);width:16px;height:16px;border-radius:50%;background:var(–red);color:#fff;font-size:8px;display:none;align-items:center;justify-content:center;font-family:var(–font);}
 
 /* BRACKETS */
 .brk{position:relative;border:1px solid var(–border);border-radius:3px;}
-.brk::before,.brk::after,.brk>.c1,.brk>.c2{content:’’;position:absolute;width:14px;height:14px;border-color:var(–glow);border-style:solid;z-index:2;}
+.brk::before,.brk::after,.brk>.c1,.brk>.c2{content:’’;position:absolute;width:12px;height:12px;border-color:var(–glow);border-style:solid;z-index:2;}
 .brk::before{top:-1px;left:-1px;border-width:2px 0 0 2px;}
 .brk::after{top:-1px;right:-1px;border-width:2px 2px 0 0;}
 .brk>.c1{bottom:-1px;left:-1px;border-width:0 0 2px 2px;}
 .brk>.c2{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
 
 /* HEADER */
-.hdr{background:var(–card);padding:16px;margin-bottom:12px;text-align:center;}
-.hdr-eye{font-size:9px;letter-spacing:4px;color:var(–muted2);font-family:var(–font);margin-bottom:6px;}
-.hdr-title{font-family:var(–font);font-size:clamp(18px,6vw,28px);font-weight:900;letter-spacing:4px;color:var(–glow);text-shadow:0 0 20px rgba(0,255,136,0.8),0 0 40px rgba(0,255,136,0.4);text-transform:uppercase;}
-.hdr-sub{font-size:10px;letter-spacing:3px;color:var(–muted2);font-family:var(–font);margin-top:4px;}
-.hdr-status{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:12px;padding-top:10px;border-top:1px solid var(–border);}
-.hs{display:flex;align-items:center;gap:6px;font-size:10px;color:var(–muted2);font-family:var(–font);}
-.hdot{width:6px;height:6px;border-radius:50%;background:var(–glow);box-shadow:0 0 8px var(–glow);animation:blink 2s infinite;}
+.hdr{background:var(–card);padding:14px;margin-bottom:12px;text-align:center;}
+.hdr-eye{font-size:8px;letter-spacing:4px;color:var(–muted2);font-family:var(–font);margin-bottom:4px;}
+.hdr-title{font-family:var(–font);font-size:clamp(16px,6vw,24px);font-weight:900;letter-spacing:3px;color:var(–glow);text-shadow:0 0 20px rgba(0,255,136,0.8);text-transform:uppercase;}
+.hdr-status{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px;padding-top:8px;border-top:1px solid var(–border);}
+.hs{display:flex;align-items:center;gap:5px;font-size:9px;color:var(–muted2);font-family:var(–font);}
+.hdot{width:5px;height:5px;border-radius:50%;background:var(–glow);box-shadow:0 0 6px var(–glow);animation:blink 2s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
-#clk{font-family:var(–font);font-size:12px;color:var(–glow);}
-
-/* TABS */
-.tabs{display:flex;background:var(–card);border:1px solid var(–border);border-radius:3px;overflow:hidden;margin-bottom:12px;}
-.tb{flex:1;padding:11px 2px;background:transparent;border:none;font-family:var(–font);font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(–muted2);cursor:pointer;position:relative;transition:all 0.2s;}
-.tb.on{color:var(–glow);background:rgba(0,255,136,0.06);}
-.tb.on::after{content:’’;position:absolute;bottom:0;left:0;right:0;height:2px;background:var(–glow);box-shadow:0 0 8px var(–glow);}
-.tbadge{display:none;position:absolute;top:5px;right:5px;width:15px;height:15px;border-radius:50%;background:var(–red);color:#fff;font-size:8px;align-items:center;justify-content:center;font-family:var(–font);}
+#clk{font-family:var(–font);font-size:11px;color:var(–glow);}
 
 /* STATS */
 .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
-.sc{background:var(–card);padding:14px;text-align:center;}
-.sl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(–muted2);font-family:var(–font);margin-bottom:4px;}
-.sv{font-family:var(–font);font-size:clamp(26px,8vw,34px);font-weight:900;line-height:1;}
+.sc{background:var(–card);padding:12px;text-align:center;}
+.sl{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(–muted2);font-family:var(–font);margin-bottom:4px;}
+.sv{font-family:var(–font);font-size:clamp(28px,9vw,36px);font-weight:900;line-height:1;}
 .cg{color:var(–glow);text-shadow:0 0 16px rgba(0,255,136,0.7);}
 .cr{color:var(–red);text-shadow:0 0 16px rgba(255,34,68,0.7);}
 .cy{color:var(–yellow);text-shadow:0 0 16px rgba(255,204,0,0.7);}
-.cc{color:var(–cyan);text-shadow:0 0 16px rgba(0,229,204,0.7);}
+.cc{color:var(–cyan);text-shadow:0 0 16px rgba(0,229,204,0.7);font-size:clamp(20px,6vw,26px);}
 
 /* SECTION */
-.sec{font-family:var(–font);font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(–muted2);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec{font-family:var(–font);font-size:8px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(–muted2);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
 .sec::after{content:’’;flex:1;height:1px;background:linear-gradient(90deg,var(–border),transparent);}
 
-/* PANELS */
+/* PANEL BUTTONS */
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
-.pb{background:var(–card);border:none;padding:14px 12px;display:flex;flex-direction:column;align-items:flex-start;gap:3px;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;transition:all 0.2s;}
-.pb::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:var(–pc,var(–glow));box-shadow:0 0 12px var(–pc,var(–glow));}
-.pb:active{transform:scale(0.97);}
-.pi{font-size:20px;}.pn{font-family:var(–font);font-size:10px;font-weight:700;color:var(–text);letter-spacing:1px;margin-top:2px;}
-.pt{font-size:10px;color:var(–muted2);}.pa{position:absolute;top:10px;right:10px;font-size:13px;color:var(–muted);}
+.pb{background:var(–card);border:none;padding:14px 10px;display:flex;flex-direction:column;align-items:flex-start;gap:3px;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;transition:all 0.15s;-webkit-touch-callout:none;}
+.pb::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:var(–pc,var(–glow));box-shadow:0 0 10px var(–pc,var(–glow));}
+.pb:active{transform:scale(0.95);opacity:0.8;}
+.pi{font-size:22px;}.pn{font-family:var(–font);font-size:10px;font-weight:700;color:var(–text);letter-spacing:1px;margin-top:2px;}
+.pt{font-size:10px;color:var(–muted2);}.pa{position:absolute;top:10px;right:10px;font-size:12px;color:var(–muted);}
 
 /* ALERT CARDS */
 .alist{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
-.ac{background:var(–card);padding:14px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;}
+.ac{background:var(–card);padding:12px;display:flex;align-items:center;gap:10px;position:relative;overflow:hidden;}
 .ac::before{content:’’;position:absolute;left:0;top:0;bottom:0;width:3px;}
-.ac.urg::before{background:var(–red);box-shadow:0 0 10px var(–red);}
-.ac.wrn::before{background:var(–yellow);box-shadow:0 0 10px var(–yellow);}
-.aava{width:40px;height:40px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(–font);font-size:13px;font-weight:900;}
+.ac.urg::before{background:var(–red);box-shadow:0 0 8px var(–red);}
+.ac.wrn::before{background:var(–yellow);box-shadow:0 0 8px var(–yellow);}
+.aava{width:38px;height:38px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(–font);font-size:12px;font-weight:900;}
 .ar{background:rgba(255,34,68,0.15);color:var(–red);border:1px solid rgba(255,34,68,0.3);}
 .ay{background:rgba(255,204,0,0.15);color:var(–yellow);border:1px solid rgba(255,204,0,0.3);}
 .ainf{flex:1;min-width:0;}
-.an{font-family:var(–font);font-size:12px;font-weight:700;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.am{font-size:12px;color:var(–muted2);margin-top:2px;}
+.an{font-family:var(–font);font-size:11px;font-weight:700;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.am{font-size:11px;color:var(–muted2);margin-top:1px;}
 .nb{background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);border-radius:6px;padding:8px 10px;font-size:18px;cursor:pointer;flex-shrink:0;}
-.nb:active{background:rgba(0,255,136,0.2);}
 
 /* CUSTOMER CARDS */
 .clist{display:flex;flex-direction:column;gap:8px;}
-.cc2{background:var(–card);padding:14px 14px 14px 18px;position:relative;overflow:hidden;}
+.cc2{background:var(–card);padding:12px 12px 12px 16px;position:relative;overflow:hidden;border-radius:3px;}
 .cc2::before{content:’’;position:absolute;left:0;top:0;bottom:0;width:3px;}
-.cc2.sg::before{background:var(–glow);box-shadow:0 0 8px var(–glow);}
-.cc2.sy::before{background:var(–yellow);box-shadow:0 0 8px var(–yellow);}
-.cc2.sr::before{background:var(–red);box-shadow:0 0 8px var(–red);}
+.cc2.sg::before{background:var(–glow);box-shadow:0 0 6px var(–glow);}
+.cc2.sy::before{background:var(–yellow);box-shadow:0 0 6px var(–yellow);}
+.cc2.sr::before{background:var(–red);box-shadow:0 0 6px var(–red);}
 .ctop{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;}
-.cname{font-family:var(–font);font-size:12px;font-weight:700;letter-spacing:1px;}
-.cbadge{font-family:var(–font);font-size:8px;font-weight:700;letter-spacing:1px;padding:3px 7px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+.cname{font-family:var(–font);font-size:11px;font-weight:700;letter-spacing:1px;}
+.cbadge{font-family:var(–font);font-size:8px;font-weight:700;letter-spacing:1px;padding:3px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
 .bg{background:rgba(0,255,136,0.1);color:var(–glow);border:1px solid rgba(0,255,136,0.25);}
 .by{background:rgba(255,204,0,0.1);color:var(–yellow);border:1px solid rgba(255,204,0,0.25);}
 .bred{background:rgba(255,34,68,0.1);color:var(–red);border:1px solid rgba(255,34,68,0.25);}
-.cmeta{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap;}
+.cmeta{display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap;}
 .cm{font-size:11px;color:var(–muted2);}
-.cprice{font-family:var(–font);font-size:13px;font-weight:700;color:var(–glow);}
-.cacts{display:flex;gap:6px;margin-top:10px;}
-.ca{flex:1;background:var(–card2);border:1px solid var(–border);border-radius:3px;padding:9px 4px;font-family:var(–font);font-size:9px;font-weight:700;letter-spacing:1px;color:var(–text);cursor:pointer;text-align:center;}
-.ca:active{opacity:0.7;}
+.cprice{font-family:var(–font);font-size:12px;font-weight:700;color:var(–glow);}
+.cacts{display:flex;gap:6px;margin-top:9px;}
+.ca{flex:1;background:var(–card2);border:1px solid var(–border);border-radius:3px;padding:10px 4px;font-family:var(–font);font-size:9px;font-weight:700;letter-spacing:1px;color:var(–text);cursor:pointer;text-align:center;}
+.ca:active{opacity:0.6;}
 .ca.ren{border-color:rgba(0,255,136,0.3);color:var(–glow);}
 .ca.msg{border-color:rgba(0,229,204,0.3);color:var(–cyan);}
 .ca.del{border-color:rgba(255,34,68,0.2);color:var(–red);}
 
-/* SYNC */
-.sync-box{background:var(–card);border:1px solid var(–border);border-radius:3px;padding:16px;margin-bottom:14px;}
-.sync-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.sync-title{font-family:var(–font);font-size:11px;font-weight:700;letter-spacing:2px;}
-.sync-status{font-family:var(–font);font-size:9px;padding:3px 8px;border-radius:3px;}
-.ss-ready{background:rgba(0,255,136,0.1);color:var(–glow);border:1px solid rgba(0,255,136,0.3);}
-.ss-none{background:rgba(61,138,85,0.1);color:var(–muted2);border:1px solid var(–border);}
-
-.sync-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.3);border-radius:3px;font-family:var(–font);font-size:11px;font-weight:700;letter-spacing:2px;color:var(–glow);cursor:pointer;transition:all 0.2s;}
-.sync-btn:active{background:rgba(0,255,136,0.15);}
-.sync-btn.busy{opacity:0.5;pointer-events:none;}
-.spin{animation:spin 1s linear infinite;display:inline-block;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-.sync-results{background:var(–bg2);border:1px solid var(–border);border-radius:3px;margin-top:10px;max-height:280px;overflow-y:auto;}
-.sl-row{padding:10px 12px;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:8px;}
-.sl-row:last-child{border-bottom:none;}
-.sl-user{font-family:var(–font);font-size:10px;color:var(–cyan);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.sl-exp{font-family:var(–font);font-size:10px;white-space:nowrap;flex-shrink:0;}
-.ok{color:var(–glow);}.soon{color:var(–yellow);}.over{color:var(–red);}
-.lbtn{background:rgba(170,68,255,0.15);border:1px solid rgba(170,68,255,0.3);border-radius:3px;padding:4px 8px;font-family:var(–font);font-size:9px;font-weight:700;color:var(–purple);cursor:pointer;white-space:nowrap;flex-shrink:0;}
-.lbtn.linked{background:rgba(0,255,136,0.1);border-color:rgba(0,255,136,0.3);color:var(–glow);}
-
 /* FAB */
-.fab{position:fixed;bottom:24px;right:20px;z-index:50;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(–glow),var(–cyan));border:none;cursor:pointer;font-size:28px;color:var(–bg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(0,255,136,0.5);animation:fabp 3s ease-in-out infinite;}
-@keyframes fabp{0%,100%{box-shadow:0 0 20px rgba(0,255,136,0.5)}50%{box-shadow:0 0 40px rgba(0,255,136,0.9)}}
-.fab:active{transform:scale(0.92);}
+.fab{position:fixed;bottom:calc(70px + var(–safe-bottom));right:16px;z-index:49;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(–glow),var(–cyan));border:none;cursor:pointer;font-size:26px;color:var(–bg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 24px rgba(0,255,136,0.5);animation:fabp 3s ease-in-out infinite;}
+@keyframes fabp{0%,100%{box-shadow:0 0 16px rgba(0,255,136,0.5)}50%{box-shadow:0 0 32px rgba(0,255,136,0.9)}}
+.fab:active{transform:scale(0.9);}
 
-/* OVERLAY/DRAWER */
+/* DRAWER */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:100;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity 0.25s;}
 .ov.on{opacity:1;pointer-events:all;}
-.drw{width:100%;background:var(–card);border-top:2px solid var(–glow);box-shadow:0 0 40px rgba(0,255,136,0.3);padding:20px 16px 44px;transform:translateY(100%);transition:transform 0.3s ease;max-height:92vh;overflow-y:auto;}
+.drw{width:100%;background:var(–card);border-top:2px solid var(–glow);box-shadow:0 0 40px rgba(0,255,136,0.3);padding:20px 16px;padding-bottom:calc(24px + var(–safe-bottom));transform:translateY(100%);transition:transform 0.3s ease;max-height:90vh;overflow-y:auto;}
 .ov.on .drw{transform:translateY(0);}
-.dtitle{font-family:var(–font);font-size:14px;font-weight:900;letter-spacing:3px;color:var(–glow);text-shadow:0 0 16px rgba(0,255,136,0.6);margin-bottom:20px;text-align:center;text-transform:uppercase;}
-.fg{margin-bottom:13px;}
-.fl{display:block;font-family:var(–font);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(–muted2);margin-bottom:5px;}
-.fi{width:100%;background:var(–bg2);border:1px solid var(–border);border-radius:3px;padding:12px 13px;font-family:var(–body);font-size:16px;color:var(–text);outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
+.dtitle{font-family:var(–font);font-size:13px;font-weight:900;letter-spacing:3px;color:var(–glow);text-shadow:0 0 12px rgba(0,255,136,0.6);margin-bottom:18px;text-align:center;text-transform:uppercase;}
+.fg{margin-bottom:12px;}
+.fl{display:block;font-family:var(–font);font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(–muted2);margin-bottom:5px;}
+.fi{width:100%;background:var(–bg2);border:1px solid var(–border);border-radius:3px;padding:13px;font-family:var(–body);font-size:16px;color:var(–text);outline:none;-webkit-appearance:none;appearance:none;}
 .fi:focus{border-color:var(–glow);}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.dacts{display:flex;gap:10px;margin-top:18px;}
-.db{flex:1;padding:14px;border-radius:3px;font-family:var(–font);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:none;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.dacts{display:flex;gap:10px;margin-top:16px;}
+.db{flex:1;padding:14px;border-radius:3px;font-family:var(–font);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:none;}
 .db.p{background:linear-gradient(135deg,var(–glow),var(–cyan));color:var(–bg);}
 .db.s{background:transparent;border:1px solid var(–border);color:var(–muted2);}
 
-/* SEARCH/PILLS */
+/* SEARCH */
 .srchwrap{position:relative;margin-bottom:10px;}
-.srchi{width:100%;background:var(–card);border:1px solid var(–border);border-radius:3px;padding:12px 12px 12px 36px;font-family:var(–body);font-size:15px;color:var(–text);outline:none;}
+.srchi{width:100%;background:var(–card);border:1px solid var(–border);border-radius:3px;padding:12px 12px 12px 36px;font-family:var(–body);font-size:16px;color:var(–text);outline:none;-webkit-appearance:none;}
 .srchi:focus{border-color:var(–glow);}
 .srchicon{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;}
-.pills{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;}
-.pill{padding:6px 12px;border-radius:3px;white-space:nowrap;font-family:var(–font);font-size:8px;font-weight:700;letter-spacing:1.5px;background:var(–card);border:1px solid var(–border);color:var(–muted2);cursor:pointer;flex-shrink:0;}
+
+/* PILLS */
+.pills{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;}
+.pill{padding:7px 14px;border-radius:20px;white-space:nowrap;font-family:var(–font);font-size:8px;font-weight:700;letter-spacing:1.5px;background:var(–card);border:1px solid var(–border);color:var(–muted2);cursor:pointer;flex-shrink:0;}
 .pill.on{background:rgba(0,255,136,0.1);border-color:var(–glow);color:var(–glow);}
 
 /* TOAST */
-.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(10px);background:var(–card);border:1px solid var(–glow);border-radius:3px;padding:10px 18px;font-family:var(–font);font-size:10px;letter-spacing:1px;color:var(–glow);box-shadow:0 0 24px rgba(0,255,136,0.3);z-index:200;opacity:0;transition:all 0.3s;white-space:nowrap;pointer-events:none;}
+.toast{position:fixed;bottom:calc(80px + var(–safe-bottom));left:50%;transform:translateX(-50%) translateY(10px);background:var(–card);border:1px solid var(–glow);border-radius:20px;padding:10px 20px;font-family:var(–font);font-size:10px;letter-spacing:1px;color:var(–glow);box-shadow:0 0 20px rgba(0,255,136,0.3);z-index:200;opacity:0;transition:all 0.3s;white-space:nowrap;pointer-events:none;}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
 
-.empty{text-align:center;padding:36px 16px;font-family:var(–font);font-size:10px;letter-spacing:2px;color:var(–muted2);line-height:2.2;}
-.ei{font-size:36px;display:block;margin-bottom:10px;}
-.bpad{height:80px;}
+/* INSTALL BANNER */
+.install-banner{background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.25);border-radius:10px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.ib-icon{font-size:28px;flex-shrink:0;}
+.ib-text{flex:1;}
+.ib-title{font-family:var(–font);font-size:10px;font-weight:700;color:var(–glow);letter-spacing:1px;}
+.ib-sub{font-size:11px;color:var(–muted2);margin-top:3px;line-height:1.5;}
+.ib-close{background:transparent;border:none;color:var(–muted2);font-size:18px;cursor:pointer;padding:4px;flex-shrink:0;}
+
+.empty{text-align:center;padding:40px 16px;font-family:var(–font);font-size:9px;letter-spacing:2px;color:var(–muted2);line-height:2.5;}
+.ei{font-size:40px;display:block;margin-bottom:10px;}
+
+/* INFO BOX */
+.infobox{background:rgba(0,229,204,0.05);border:1px solid rgba(0,229,204,0.15);border-radius:6px;padding:12px;font-size:12px;color:var(–muted2);line-height:1.8;margin-bottom:12px;}
+.infobox strong{color:var(–cyan);}
 </style>
 
 </head>
 <body>
 <div class="app">
 
+<!-- INSTALL BANNER -->
+
+<div class="install-banner" id="install-banner">
+<div class="ib-icon">📲</div>
+<div class="ib-text">
+<div class="ib-title">ADD TO HOME SCREEN</div>
+<div class="ib-sub">Tap <strong style="color:var(--text)">Share ↑</strong> then <strong style="color:var(--text)">"Add to Home Screen"</strong> to use like an app</div>
+</div>
+<button class="ib-close" onclick="dismissBanner()">✕</button>
+</div>
+
 <!-- HEADER -->
 
 <div class="brk hdr"><div class="c1"></div><div class="c2"></div>
 <div class="hdr-eye">// ROCKBOTTOM TV //</div>
 <div class="hdr-title">IPTV OPS CENTER</div>
-<div class="hdr-sub">COMMAND DASHBOARD</div>
 <div class="hdr-status">
-<div class="hs"><div class="hdot"></div>SYSTEM ONLINE</div>
+<div class="hs"><div class="hdot"></div>ONLINE</div>
 <div id="clk">--:--:--</div>
 </div>
-</div>
-
-<!-- TABS -->
-
-<div class="tabs">
-<button class="tb on" onclick="go('overview',this)">📊 OVERVIEW</button>
-<button class="tb" onclick="go('customers',this)">👥 CLIENTS</button>
-<button class="tb" onclick="go('alerts',this)">🔔 ALERTS<span class="tbadge" id="abadge">0</span></button>
-<button class="tb" onclick="go('sync',this)">⚡ SYNC</button>
 </div>
 
 <!-- ═══ OVERVIEW ═══ -->
 
 <div id="v-overview">
 <div class="sgrid">
-<div class="brk sc"><div class="c1"></div><div class="c2"></div><div class="sl">Total Clients</div><div class="sv cg" id="ov-t">0</div></div>
+<div class="brk sc"><div class="c1"></div><div class="c2"></div><div class="sl">Clients</div><div class="sv cg" id="ov-t">0</div></div>
 <div class="brk sc"><div class="c1"></div><div class="c2"></div><div class="sl">Overdue</div><div class="sv cr" id="ov-o">0</div></div>
 <div class="brk sc"><div class="c1"></div><div class="c2"></div><div class="sl">Due This Week</div><div class="sv cy" id="ov-w">0</div></div>
-<div class="brk sc"><div class="c1"></div><div class="c2"></div><div class="sl">Monthly Revenue</div><div class="sv cc" id="ov-r" style="font-size:clamp(18px,5vw,26px)">$0</div></div>
+<div class="brk sc"><div class="c1"></div><div class="c2"></div><div class="sl">Monthly Revenue</div><div class="sv cc" id="ov-r">$0</div></div>
 </div>
 <div class="sec">YOUR PANELS</div>
 <div class="pgrid">
-<a class="brk pb" href="http://kytv.xyz/HckqYJZU/login" target="_blank" style="--pc:var(--glow)"><div class="c1"></div><div class="c2"></div><div class="pi">📡</div><div class="pn">KYTV.XYZ</div><div class="pt">XUI · 105 credits</div><div class="pa">↗</div></a>
-<a class="brk pb" href="https://thexpanel.xyz/dashboard" target="_blank" style="--pc:var(--cyan)"><div class="c1"></div><div class="c2"></div><div class="pi">🖥</div><div class="pn">THEXPANEL</div><div class="pt">XUI · 54 active</div><div class="pa">↗</div></a>
-<a class="brk pb" href="https://my8k.me" target="_blank" style="--pc:var(--orange)"><div class="c1"></div><div class="c2"></div><div class="pi">⚡</div><div class="pn">MY8K.ME</div><div class="pt">8K Gold · Rockbottom</div><div class="pa">↗</div></a>
-<a class="brk pb" href="https://superadminpanels.com" target="_blank" style="--pc:var(--purple)"><div class="c1"></div><div class="c2"></div><div class="pi">🔑</div><div class="pn">SUPERADMIN</div><div class="pt">SuperAdmin Panel</div><div class="pa">↗</div></a>
+<a class="brk pb" href="http://kytv.xyz/HckqYJZU/login" target="_blank" style="--pc:var(--glow)"><div class="c1"></div><div class="c2"></div><div class="pi">📡</div><div class="pn">KYTV.XYZ</div><div class="pt">XUI Panel</div><div class="pa">↗</div></a>
+<a class="brk pb" href="https://thexpanel.xyz/dashboard" target="_blank" style="--pc:var(--cyan)"><div class="c1"></div><div class="c2"></div><div class="pi">🖥</div><div class="pn">THEXPANEL</div><div class="pt">XUI Panel</div><div class="pa">↗</div></a>
+<a class="brk pb" href="https://my8k.me" target="_blank" style="--pc:var(--orange)"><div class="c1"></div><div class="c2"></div><div class="pi">⚡</div><div class="pn">MY8K.ME</div><div class="pt">8K Gold</div><div class="pa">↗</div></a>
+<a class="brk pb" href="https://superadminpanels.com" target="_blank" style="--pc:var(--purple)"><div class="c1"></div><div class="c2"></div><div class="pi">🔑</div><div class="pn">SUPERADMIN</div><div class="pt">SuperAdmin</div><div class="pa">↗</div></a>
 </div>
 <div class="sec">UPCOMING BILLS</div>
 <div class="alist" id="ov-up"></div>
-<div class="bpad"></div>
 </div>
 
 <!-- ═══ CUSTOMERS ═══ -->
@@ -230,7 +264,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 <div class="pill" onclick="setf(this,'ok')">GOOD</div>
 </div>
 <div class="clist" id="clist"></div>
-<div class="bpad"></div>
 </div>
 
 <!-- ═══ ALERTS ═══ -->
@@ -240,73 +273,70 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 <div class="alist" id="al-o"></div>
 <div class="sec" style="color:var(--yellow)">⏰ DUE THIS WEEK</div>
 <div class="alist" id="al-w"></div>
-<div class="bpad"></div>
 </div>
 
-<!-- ═══ SYNC ═══ -->
+<!-- ═══ MORE ═══ -->
 
-<div id="v-sync" style="display:none">
+<div id="v-more" style="display:none">
 
-<!-- KYTV -->
-
-<div class="sync-box">
-<div class="sync-head">
-<div class="sync-title" style="color:var(--glow)">📡 KYTV.XYZ</div>
-<div class="sync-status ss-ready">✓ API KEY READY</div>
+```
+<div class="infobox">
+<strong>LOAD CUSTOMERS FROM JSON:</strong><br>
+Tap the button below and select your <strong style="color:var(--text)">customers.json</strong> file. All customers will import instantly. Save it to your iPhone Files app for easy access.
 </div>
-<div style="font-family:var(--font);font-size:9px;color:var(--muted2);margin-bottom:10px;line-height:1.8">
-SERVER: <span style="color:var(--cyan)">ky-tv.cc:80</span><br>
-API KEY: <span style="color:var(--glow)">C90DFB1E...8878E9</span>
-</div>
-<button class="sync-btn" id="sync-kytv" onclick="syncKYTV()">
-<span id="kytv-icon">⟳</span> SYNC ALL LINES FROM KYTV
+
+<input type="file" id="json-file" accept=".json" style="display:none" onchange="loadJSON(event)">
+<button class="db p" style="width:100%;margin-bottom:10px;padding:16px" onclick="document.getElementById('json-file').click()">
+📂 LOAD CUSTOMERS FROM JSON
 </button>
-<div id="kytv-results"></div>
+
+<div class="sec">DATA</div>
+<div style="display:flex;gap:10px;margin-bottom:14px">
+<button class="db p" style="flex:1" onclick="expData()">⬇ EXPORT JSON</button>
+<button class="db s" style="flex:1;border:1px solid var(--border)" onclick="clearAll()">🗑 CLEAR ALL</button>
 </div>
 
-<!-- THEXPANEL -->
+<div class="sec">ADD TO HOME SCREEN</div>
+<div class="infobox">
+<strong>iPhone:</strong> Open this page in Safari → tap Share ↑ → "Add to Home Screen" → Add<br><br>
+<strong>Android:</strong> Open in Chrome → tap ⋮ menu → "Add to Home Screen"<br><br>
+Once added it opens full screen like a real app with no browser bar!
+</div>
 
-<div class="sync-box">
-<div class="sync-head">
-<div class="sync-title" style="color:var(--cyan)">🖥 THEXPANEL.XYZ</div>
-<div class="sync-status ss-ready">✓ API KEY READY</div>
+<div class="sec">PANELS</div>
+<div class="pgrid">
+<a class="brk pb" href="http://kytv.xyz/HckqYJZU/login" target="_blank" style="--pc:var(--glow)"><div class="c1"></div><div class="c2"></div><div class="pi">📡</div><div class="pn">KYTV.XYZ</div><div class="pt">XUI</div><div class="pa">↗</div></a>
+<a class="brk pb" href="https://thexpanel.xyz/dashboard" target="_blank" style="--pc:var(--cyan)"><div class="c1"></div><div class="c2"></div><div class="pi">🖥</div><div class="pn">THEXPANEL</div><div class="pt">XUI</div><div class="pa">↗</div></a>
+<a class="brk pb" href="https://my8k.me" target="_blank" style="--pc:var(--orange)"><div class="c1"></div><div class="c2"></div><div class="pi">⚡</div><div class="pn">MY8K.ME</div><div class="pt">8K Gold</div><div class="pa">↗</div></a>
+<a class="brk pb" href="https://superadminpanels.com" target="_blank" style="--pc:var(--purple)"><div class="c1"></div><div class="c2"></div><div class="pi">🔑</div><div class="pn">SUPERADMIN</div><div class="pt">SuperAdmin</div><div class="pa">↗</div></a>
 </div>
-<div style="font-family:var(--font);font-size:9px;color:var(--muted2);margin-bottom:10px;line-height:1.8">
-SERVER: <span style="color:var(--cyan)">thexpanel.xyz</span><br>
-API KEY: <span style="color:var(--glow)">69bee83d...df2220</span>
+```
+
 </div>
-<button class="sync-btn" id="sync-thex" onclick="syncTHEX()" style="border-color:rgba(0,229,204,0.3);color:var(--cyan)">
-<span id="thex-icon">⟳</span> SYNC ALL LINES FROM THEXPANEL
+
+</div><!-- /.app -->
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom-nav">
+<button class="nav-btn on" onclick="go('overview',this)">
+<span class="nav-icon">📊</span>
+<span class="nav-label">Overview</span>
 </button>
-<div id="thex-results"></div>
-</div>
-
-<!-- MY8K + SUPERADMIN -->
-
-<div class="sync-box">
-<div class="sync-head">
-<div class="sync-title" style="color:var(--orange)">⚡ MY8K &amp; SUPERADMIN</div>
-<div class="sync-status ss-none">MANUAL</div>
-</div>
-<div style="font-size:12px;color:var(--muted2);margin-bottom:12px;line-height:1.7">No API available for these panels. Open them directly and add those customers using the + button.</div>
-<div style="display:flex;gap:10px">
-<a class="db p" href="https://my8k.me" target="_blank" style="text-decoration:none;text-align:center;background:linear-gradient(135deg,var(--orange),var(--yellow));flex:1;padding:12px">OPEN MY8K ↗</a>
-<a class="db p" href="https://superadminpanels.com" target="_blank" style="text-decoration:none;text-align:center;background:linear-gradient(135deg,var(--purple),var(--cyan));flex:1;padding:12px">OPEN SUPERADMIN ↗</a>
-</div>
-</div>
-
-<!-- DATA -->
-
-<div class="sec">DATA BACKUP</div>
-<div style="display:flex;gap:10px;margin-bottom:20px">
-<button class="db p" style="flex:1" onclick="expData()">⬇ EXPORT BACKUP</button>
-<button class="db s" style="flex:1" onclick="document.getElementById('impf').click()">⬆ IMPORT BACKUP</button>
-</div>
-<input type="file" id="impf" accept=".json" style="display:none" onchange="impData(event)">
-<div class="bpad"></div>
-</div>
-
-</div>
+<button class="nav-btn" onclick="go('customers',this)">
+<span class="nav-icon">👥</span>
+<span class="nav-label">Clients</span>
+</button>
+<button class="nav-btn" onclick="go('alerts',this)">
+<span class="nav-icon">🔔</span>
+<span class="nav-badge" id="abadge">0</span>
+<span class="nav-label">Alerts</span>
+</button>
+<button class="nav-btn" onclick="go('more',this)">
+<span class="nav-icon">⚙️</span>
+<span class="nav-label">More</span>
+</button>
+</nav>
 
 <!-- FAB -->
 
@@ -319,111 +349,77 @@ API KEY: <span style="color:var(--glow)">69bee83d...df2220</span>
 <div class="ov" id="drw-add" onclick="if(event.target===this)closeD()">
 <div class="drw">
 <div class="dtitle">// ADD CLIENT //</div>
-<div class="fg"><label class="fl">Full Name *</label><input class="fi" id="ac-n" placeholder="e.g. John Smith" autocomplete="off"></div>
+<div class="fg"><label class="fl">Full Name *</label><input class="fi" id="ac-n" placeholder="e.g. John Smith" autocomplete="off" autocorrect="off"></div>
 <div class="fg"><label class="fl">Phone Number</label><input class="fi" id="ac-ph" type="tel" placeholder="555-867-5309"></div>
-<div class="fg"><label class="fl">Line Username (from panel)</label><input class="fi" id="ac-lu" placeholder="e.g. Nelson79659"></div>
+<div class="fg"><label class="fl">Line Username</label><input class="fi" id="ac-lu" placeholder="From panel" autocorrect="off"></div>
 <div class="frow">
 <div class="fg"><label class="fl">Panel</label>
 <select class="fi" id="ac-pan">
-<option value="kytv.xyz">kytv.xyz (XUI)</option>
-<option value="thexpanel.xyz">thexpanel.xyz (XUI)</option>
-<option value="my8k.me">my8k.me (8K Gold)</option>
+<option value="kytv.xyz">kytv.xyz</option>
+<option value="thexpanel.xyz">thexpanel.xyz</option>
+<option value="my8k.me">my8k.me</option>
 <option value="superadminpanels.com">SuperAdmin</option>
 </select>
 </div>
 <div class="fg"><label class="fl">Package</label><input class="fi" id="ac-pk" placeholder="Premium"></div>
 </div>
 <div class="frow">
-<div class="fg"><label class="fl">Price ($/mo)</label><input class="fi" id="ac-pr" type="number" value="40"></div>
+<div class="fg"><label class="fl">Price ($/mo)</label><input class="fi" id="ac-pr" type="number" inputmode="numeric" value="40"></div>
 <div class="fg"><label class="fl">Next Bill Date</label><input class="fi" id="ac-dt" type="date"></div>
 </div>
 <div class="fg"><label class="fl">Notes</label><input class="fi" id="ac-nt" placeholder="Optional..."></div>
 <div class="dacts">
 <button class="db s" onclick="closeD()">CANCEL</button>
-<button class="db p" onclick="saveC()">SAVE CLIENT</button>
-</div>
-</div>
-</div>
-
-<!-- LINK DRAWER -->
-
-<div class="ov" id="drw-link" onclick="if(event.target===this)closeD()">
-<div class="drw">
-<div class="dtitle">// LINK LINE TO CLIENT //</div>
-<div class="fg"><label class="fl">Line Username</label><input class="fi" id="lk-user" readonly style="opacity:0.6"></div>
-<div class="fg"><label class="fl">Expiry Date</label><input class="fi" id="lk-exp" readonly style="opacity:0.6"></div>
-<div class="fg"><label class="fl">Assign to Existing Client</label>
-<select class="fi" id="lk-sel">
-<option value="">— Select client —</option>
-</select>
-</div>
-<div style="text-align:center;font-family:var(--font);font-size:9px;color:var(--muted2);margin:8px 0">— OR CREATE NEW —</div>
-<div class="fg"><label class="fl">New Client Name</label><input class="fi" id="lk-new" placeholder="Type name to create new client..."></div>
-<div class="fg"><label class="fl">Phone (optional)</label><input class="fi" id="lk-phone" placeholder="555-867-5309"></div>
-<div class="frow">
-<div class="fg"><label class="fl">Price ($/mo)</label><input class="fi" id="lk-price" type="number" value="40"></div>
-<div class="fg"><label class="fl">Bill Date</label><input class="fi" id="lk-date" type="date"></div>
-</div>
-<div class="dacts">
-<button class="db s" onclick="closeD()">CANCEL</button>
-<button class="db p" onclick="saveLink()">LINK &amp; SAVE</button>
+<button class="db p" onclick="saveC()">SAVE</button>
 </div>
 </div>
 </div>
 
 <script>
-// ══════════════════════════════════════════
-// API KEYS — stored here, never leave device
-// ══════════════════════════════════════════
-const KYTV_SERVER = 'http://ky-tv.cc:80';
-const KYTV_KEY = 'C90DFB1E43C95B70F4CDCC97B68878E9';
-const THEX_SERVER = 'https://thexpanel.xyz';
-const THEX_KEY = '69bee83df221d69bee83df221e69bee83df221f69bee83df2220';
-
-// ══════════════════════════════════════════
 // STATE
-// ══════════════════════════════════════════
-function ls(){try{return JSON.parse(localStorage.getItem('rb-v5')||'null');}catch(e){return null;}}
-let S=ls()||{customers:[],links:{},synced:{}};
-function sv(){localStorage.setItem('rb-v5',JSON.stringify(S));}
+function ls(){try{return JSON.parse(localStorage.getItem('rb-pwa')||'null');}catch(e){return null;}}
+let S=ls()||{customers:[],hideBanner:false};
+function sv(){localStorage.setItem('rb-pwa',JSON.stringify(S));}
 
 // HELPERS
 function du(d){const t=new Date();t.setHours(0,0,0,0);const x=new Date(d);x.setHours(0,0,0,0);return Math.round((x-t)/86400000);}
 function stat(days){
 if(days<0)return['sr','bred',`${Math.abs(days)}D OVERDUE`,'overdue'];
-if(days===0)return['sr','bred','DUE TODAY','week'];
-if(days<=3)return['sr','bred',`IN ${days}D`,'week'];
-if(days<=7)return['sy','by',`IN ${days}D`,'week'];
+if(days===0)return['sr','bred','TODAY','week'];
+if(days<=3)return['sr','bred',`${days}D`,'week'];
+if(days<=7)return['sy','by',`${days}D`,'week'];
 return['sg','bg',`${days}D`,'ok'];
 }
 function fd(s){if(!s)return'—';return new Date(s).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
 function ini(n){return n.split(' ').map(x=>x[0]||'').join('').slice(0,2).toUpperCase();}
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2800);}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}
 function tick(){document.getElementById('clk').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
 setInterval(tick,1000);tick();
 
-// ══════════════════════════════════════════
+// INSTALL BANNER
+function dismissBanner(){
+document.getElementById('install-banner').style.display='none';
+S.hideBanner=true;sv();
+}
+// Hide banner if already installed as PWA or user dismissed
+if(window.navigator.standalone||S.hideBanner){
+document.getElementById('install-banner').style.display='none';
+}
+
 // TABS
-// ══════════════════════════════════════════
 let curTab='overview',curF='';
 function go(name,btn){
-document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
 btn.classList.add('on');
-['overview','customers','alerts','sync'].forEach(t=>document.getElementById('v-'+t).style.display=t===name?'block':'none');
+['overview','customers','alerts','more'].forEach(t=>document.getElementById('v-'+t).style.display=t===name?'block':'none');
 curTab=name;
 if(name==='overview')rO();
 if(name==='customers')renderC();
 if(name==='alerts')rA();
-if(name==='sync'){
-// Re-render any existing sync results
-if(S.synced.kytv)renderResults('kytv');
-if(S.synced.thex)renderResults('thex');
-}
+window.scrollTo(0,0);
 }
 
-// ══════════════════════════════════════════
 // OVERVIEW
-// ══════════════════════════════════════════
 function rO(){
 const cs=S.customers;
 document.getElementById('ov-t').textContent=cs.length;
@@ -438,14 +434,12 @@ const el=document.getElementById('ov-up');
 if(!up.length){el.innerHTML='<div class="empty"><span class="ei">📅</span>NO BILLS DUE THIS WEEK</div>';return;}
 el.innerHTML=up.map(c=>{
 const d=du(c.date);const ac=d<=3?'urg':'wrn';const av=d<=3?'ar':'ay';
-const lbl=d===0?'DUE TODAY':`DUE IN ${d}D`;
+const lbl=d===0?'TODAY':`IN ${d}D`;
 return`<div class="brk ac ${ac}"><div class="c1"></div><div class="c2"></div><div class="aava ${av}">${ini(c.name)}</div><div class="ainf"><div class="an">${c.name.toUpperCase()}</div><div class="am">${lbl} · $${c.price}/mo · ${c.panel||'—'}</div></div><button class="nb" onclick="cpyMsg(${c.id})">📋</button></div>`;
 }).join('');
 }
 
-// ══════════════════════════════════════════
 // CUSTOMERS
-// ══════════════════════════════════════════
 function setf(el,f){document.querySelectorAll('.pill').forEach(p=>p.classList.remove('on'));el.classList.add('on');curF=f;renderC();}
 function renderC(){
 const q=(document.getElementById('csearch')?.value||'').toLowerCase();
@@ -453,7 +447,10 @@ let cs=[...S.customers].sort((a,b)=>du(a.date)-du(b.date));
 if(q)cs=cs.filter(c=>c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)||(c.lineuser||'').toLowerCase().includes(q));
 if(curF)cs=cs.filter(c=>{const[,,,s]=stat(du(c.date));return s===curF;});
 const el=document.getElementById('clist');
-if(!cs.length){el.innerHTML=`<div class="empty"><span class="ei">👥</span>${S.customers.length===0?'NO CLIENTS YET\nTAP + TO ADD YOUR FIRST\nOR USE SYNC TAB TO IMPORT FROM PANELS':'NO RESULTS FOUND'}</div>`;return;}
+if(!cs.length){
+el.innerHTML=`<div class="empty"><span class="ei">👥</span>${S.customers.length===0?'NO CLIENTS YET\nTAP + TO ADD\nOR LOAD JSON IN MORE TAB':'NO RESULTS FOUND'}</div>`;
+return;
+}
 el.innerHTML=cs.map(c=>{
 const[sc,bc,lbl]=stat(du(c.date));
 return`<div class="brk cc2 ${sc}"><div class="c1"></div><div class="c2"></div>
@@ -461,214 +458,57 @@ return`<div class="brk cc2 ${sc}"><div class="c1"></div><div class="c2"></div>
 <div class="cmeta">
 ${c.phone?`<span class="cm">📱 ${c.phone}</span>`:''}
 ${c.lineuser?`<span class="cm">👤 ${c.lineuser}</span>`:''}
-<span class="cm">📺 ${c.panel||'—'}</span>
+<span class="cm">📺 ${(c.panel||'—').replace('.xyz','').replace('.me','').toUpperCase()}</span>
 <span class="cprice">$${c.price}/mo</span>
 </div>
-<div class="cmeta" style="margin-top:4px">
+<div class="cmeta" style="margin-top:3px">
 <span class="cm">📅 ${fd(c.date)}</span>
 ${c.notes?`<span class="cm">📝 ${c.notes}</span>`:''}
 </div>
 <div class="cacts">
-<button class="ca ren" onclick="renew(${c.id})">+1 MONTH</button>
+<button class="ca ren" onclick="renew(${c.id})">+1 MO</button>
 <button class="ca msg" onclick="cpyMsg(${c.id})">REMIND</button>
-<button class="ca del" onclick="del(${c.id})">REMOVE</button>
+<button class="ca del" onclick="del(${c.id})">✕</button>
 </div>
 </div>`;
 }).join('');
 }
 
-// ══════════════════════════════════════════
 // ALERTS
-// ══════════════════════════════════════════
 function rA(){
 const od=S.customers.filter(c=>du(c.date)<0).sort((a,b)=>du(a.date)-du(b.date));
 const wk=S.customers.filter(c=>{const d=du(c.date);return d>=0&&d<=7;}).sort((a,b)=>du(a.date)-du(b.date));
 const mk=(c,cls,av)=>{
 const d=du(c.date);
-const lbl=d<0?`${Math.abs(d)} DAY${Math.abs(d)!==1?'S':''} OVERDUE`:d===0?'DUE TODAY':`DUE IN ${d} DAY${d!==1?'S':''}`;
-return`<div class="brk ac ${cls}"><div class="c1"></div><div class="c2"></div><div class="aava ${av}">${ini(c.name)}</div><div class="ainf"><div class="an">${c.name.toUpperCase()}</div><div class="am">${lbl} · $${c.price}/mo</div><div class="am">${c.panel||'—'}${c.phone?' · 📱 '+c.phone:''}</div></div><button class="nb" onclick="cpyMsg(${c.id})">📋</button></div>`;
+const lbl=d<0?`${Math.abs(d)}D OVERDUE`:d===0?'DUE TODAY':`DUE IN ${d}D`;
+return`<div class="brk ac ${cls}"><div class="c1"></div><div class="c2"></div><div class="aava ${av}">${ini(c.name)}</div><div class="ainf"><div class="an">${c.name.toUpperCase()}</div><div class="am">${lbl} · $${c.price}/mo</div><div class="am">${c.panel||'—'}${c.phone?' · '+c.phone:''}</div></div><button class="nb" onclick="cpyMsg(${c.id})">📋</button></div>`;
 };
-document.getElementById('al-o').innerHTML=od.length?od.map(c=>mk(c,'urg','ar')).join(''):'<div class="empty" style="padding:16px;font-size:10px">✅ NONE OVERDUE</div>';
-document.getElementById('al-w').innerHTML=wk.length?wk.map(c=>mk(c,'wrn','ay')).join(''):'<div class="empty" style="padding:16px;font-size:10px">✅ NONE DUE THIS WEEK</div>';
+document.getElementById('al-o').innerHTML=od.length?od.map(c=>mk(c,'urg','ar')).join(''):'<div class="empty" style="padding:16px;font-size:9px">✅ NONE OVERDUE</div>';
+document.getElementById('al-w').innerHTML=wk.length?wk.map(c=>mk(c,'wrn','ay')).join(''):'<div class="empty" style="padding:16px;font-size:9px">✅ NONE DUE THIS WEEK</div>';
 }
 
-// ══════════════════════════════════════════
-// SYNC — API KEY METHOD
-// ══════════════════════════════════════════
-async function syncKYTV(){
-await doSync('kytv', KYTV_SERVER, KYTV_KEY, 'kytv-icon', 'sync-kytv');
-}
-
-async function syncTHEX(){
-await doSync('thex', THEX_SERVER, THEX_KEY, 'thex-icon', 'sync-thex');
-}
-
-async function doSync(key, server, apiKey, iconId, btnId){
-const btn=document.getElementById(btnId);
-const icon=document.getElementById(iconId);
-btn.classList.add('busy');
-icon.className='spin'; icon.textContent='⟳';
-
-// Try multiple XUI API endpoint formats
-const endpoints=[
-`${server}/api?api_key=${apiKey}&action=get_lines`,
-`${server}/api?api_key=${apiKey}&action=get_live_streams`,
-`${server}/player_api.php?api_key=${apiKey}&action=get_live_streams`,
-`${server}/api/get_lines?api_key=${apiKey}`,
-];
-
-let success=false;
-for(const url of endpoints){
-try{
-const res=await fetch(url,{
-mode:'cors',
-headers:{'Accept':'application/json','X-API-Key':apiKey}
-});
-if(!res.ok) continue;
-const data=await res.json();
-const lines=Array.isArray(data)?data:(data.lines||data.data||data.available_channels||[]);
-if(lines.length>0){
-S.synced[key]=lines.map(l=>({
-username: l.username||l.name||l.stream_display_name||l.id||'unknown',
-expiration: l.exp_date||l.expiration||l.expire||Math.floor(Date.now()/1000)+(30*86400)
-}));
-sv();
-renderResults(key);
-toast(`✅ SYNCED ${S.synced[key].length} LINES!`);
-success=true;
-break;
-}
-}catch(e){continue;}
-}
-
-if(!success){
-// CORS still blocked — offer to enter lines from what user can see
-const choice=confirm(`Connection blocked by panel.\n\nThis usually means the panel needs to whitelist this app.\n\nOptions:\n• OK = Load your lines manually (enter from panel)\n• Cancel = Try demo data to see how linking works`);
-if(!choice){
-loadDemo(key);
-} else {
-toast('GO TO SYNC TAB → ADD LINES MANUALLY');
-}
-}
-
-btn.classList.remove('busy');
-icon.className=''; icon.textContent='⟳';
-}
-
-function loadDemo(key){
-const now=Math.floor(Date.now()/1000);const day=86400;
-S.synced[key]=[
-{username:'client_001',expiration:now-(3*day)},
-{username:'client_002',expiration:now+(2*day)},
-{username:'client_003',expiration:now+(5*day)},
-{username:'client_004',expiration:now+(15*day)},
-{username:'client_005',expiration:now+(28*day)},
-{username:'client_006',expiration:now+(45*day)},
-];
-sv();renderResults(key);toast('DEMO DATA LOADED — REPLACE WITH REAL LINES');
-}
-
-function renderResults(key){
-const lines=S.synced[key];
-if(!lines||!lines.length)return;
-const elId=key==='kytv'?'kytv-results':'thex-results';
-const panel=key==='kytv'?'kytv.xyz':'thexpanel.xyz';
-document.getElementById(elId).innerHTML=`
-<div style="font-family:var(--font);font-size:9px;color:var(--muted2);margin:10px 0 6px;letter-spacing:1px">${lines.length} LINES — TAP LINK TO ASSIGN TO A CLIENT</div>
-<div class="sync-results">${lines.map(l=>{
-const expMs=l.expiration*1000;
-const dLeft=Math.round((expMs-Date.now())/86400000);
-const cls=dLeft<0?'over':dLeft<=7?'soon':'ok';
-const expStr=new Date(expMs).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-const linked=S.links[l.username];
-const cust=linked?S.customers.find(c=>c.id===linked):null;
-return`<div class="sl-row">
-<div class="sl-user">@${l.username}</div>
-<div class="sl-exp ${cls}">${expStr}</div>
-<button class="lbtn${cust?' linked':''}" onclick="openLink('${l.username}','${expStr}','${panel}')">
-${cust?'✓ '+cust.name.split(' ')[0]:'LINK'}
-</button>
-</div>`;
-}).join('')}</div>`;
-}
-
-// ══════════════════════════════════════════
-// LINK LINE
-// ══════════════════════════════════════════
-let _lkUser='',_lkPanel='';
-function openLink(username,expDate,panel){
-_lkUser=username; _lkPanel=panel;
-document.getElementById('lk-user').value=username;
-document.getElementById('lk-exp').value=expDate;
-document.getElementById('lk-new').value='';
-document.getElementById('lk-phone').value='';
-document.getElementById('lk-price').value='40';
-const d=new Date();d.setMonth(d.getMonth()+1);
-document.getElementById('lk-date').value=d.toISOString().split('T')[0];
-const sel=document.getElementById('lk-sel');
-sel.innerHTML='<option value="">— Select existing client —</option>'+S.customers.map(c=>`<option value="${c.id}"${S.links[username]===c.id?' selected':''}>${c.name}</option>`).join('');
-document.getElementById('drw-link').classList.add('on');
-}
-
-function saveLink(){
-const selId=parseInt(document.getElementById('lk-sel').value);
-const newName=document.getElementById('lk-new').value.trim();
-let custId=selId;
-
-if(!selId&&newName){
-// Create brand new customer from this line
-const expDate=document.getElementById('lk-date').value;
-const nc={
-id:Date.now(),name:newName,
-phone:document.getElementById('lk-phone').value.trim(),
-lineuser:_lkUser,panel:_lkPanel,pkg:'Premium',
-price:Number(document.getElementById('lk-price').value)||40,
-date:expDate,notes:''
-};
-S.customers.push(nc);
-custId=nc.id;
-}
-
-if(!custId){toast('⚠ SELECT OR CREATE A CLIENT');return;}
-
-S.links[_lkUser]=custId;
-const c=S.customers.find(x=>x.id===custId);
-if(c&&!c.lineuser)c.lineuser=_lkUser;
-
-sv();closeD();
-if(S.synced.kytv)renderResults('kytv');
-if(S.synced.thex)renderResults('thex');
-rO();toast('✅ LINE LINKED TO '+( S.customers.find(x=>x.id===custId)?.name||'CLIENT').toUpperCase());
-}
-
-// ══════════════════════════════════════════
-// CUSTOMER ACTIONS
-// ══════════════════════════════════════════
+// ACTIONS
 function renew(id){
 const c=S.customers.find(x=>x.id===id);if(!c)return;
 const d=new Date(c.date);d.setMonth(d.getMonth()+1);
 c.date=d.toISOString().split('T')[0];
-sv();toast('✅ RENEWED — NEXT BILL: '+fd(c.date));rAll();
+sv();toast('✅ RENEWED · '+fd(c.date));rAll();
 }
-
 function del(id){
-if(!confirm('Remove this client?'))return;
+if(!confirm('Remove client?'))return;
 S.customers=S.customers.filter(x=>x.id!==id);
 sv();rAll();
 }
-
 function cpyMsg(id){
 const c=S.customers.find(x=>x.id===id);if(!c)return;
 const d=du(c.date);
 const when=d<0?`is ${Math.abs(d)} day${Math.abs(d)!==1?'s':''} overdue`:d===0?'is due today':`is due in ${d} day${d!==1?'s':''}`;
 const msg=`Hey ${c.name.split(' ')[0]}! 📺 Your IPTV subscription ($${c.price}/mo) ${when}. Please send payment to keep your service active. Thanks! - RockBottom TV`;
-if(navigator.clipboard){navigator.clipboard.writeText(msg).then(()=>toast('📋 MESSAGE COPIED — READY TO SEND!')).catch(()=>prompt('Copy:',msg));}
+if(navigator.clipboard){navigator.clipboard.writeText(msg).then(()=>toast('📋 COPIED!')).catch(()=>prompt('Copy:',msg));}
 else{prompt('Copy:',msg);}
 }
 
-// ══════════════════════════════════════════
-// ADD CUSTOMER MANUALLY
-// ══════════════════════════════════════════
+// ADD
 function openAdd(){
 const d=new Date();d.setMonth(d.getMonth()+1);
 document.getElementById('ac-dt').value=d.toISOString().split('T')[0];
@@ -676,9 +516,8 @@ document.getElementById('ac-dt').value=d.toISOString().split('T')[0];
 document.getElementById('ac-pk').value='Premium';
 document.getElementById('ac-pr').value='40';
 document.getElementById('drw-add').classList.add('on');
-setTimeout(()=>document.getElementById('ac-n').focus(),350);
+setTimeout(()=>document.getElementById('ac-n').focus(),400);
 }
-
 function saveC(){
 const name=document.getElementById('ac-n').value.trim();
 const date=document.getElementById('ac-dt').value;
@@ -695,28 +534,39 @@ date,notes:document.getElementById('ac-nt').value.trim()
 });
 sv();closeD();toast('✅ CLIENT ADDED');rAll();
 }
-
 function closeD(){document.querySelectorAll('.ov').forEach(o=>o.classList.remove('on'));}
 
-// ══════════════════════════════════════════
-// DATA BACKUP
-// ══════════════════════════════════════════
-function expData(){
-const b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
-const a=document.createElement('a');
-a.href=URL.createObjectURL(b);
-a.download='rockbottom-backup-'+new Date().toISOString().split('T')[0]+'.json';
-a.click();toast('⬇ BACKUP SAVED');
-}
-
-function impData(e){
+// JSON
+function loadJSON(e){
 const f=e.target.files[0];if(!f)return;
 const r=new FileReader();
 r.onload=ev=>{
-try{S=JSON.parse(ev.target.result);sv();rAll();toast('✅ DATA IMPORTED');}
-catch(err){toast('⚠ INVALID FILE');}
+try{
+const data=JSON.parse(ev.target.result);
+const arr=Array.isArray(data)?data:(data.customers||[]);
+let added=0,updated=0;
+arr.forEach(item=>{
+if(!item.name)return;
+const ex=S.customers.find(c=>c.name.toLowerCase()===item.name.toLowerCase());
+if(ex){Object.assign(ex,item);if(!ex.id)ex.id=Date.now()+Math.random();updated++;}
+else{S.customers.push({id:Date.now()+Math.random(),...item});added++;}
+});
+sv();rAll();toast(`✅ ${added} ADDED · ${updated} UPDATED`);
+}catch(err){toast('⚠ INVALID JSON FILE');}
 };
 r.readAsText(f);
+}
+function expData(){
+const out=S.customers.map(({id,...r})=>r);
+const b=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+const a=document.createElement('a');
+a.href=URL.createObjectURL(b);
+a.download='rockbottom-backup.json';
+a.click();toast('⬇ EXPORTED');
+}
+function clearAll(){
+if(!confirm('Clear ALL customer data?'))return;
+S.customers=[];sv();rAll();toast('CLEARED');
 }
 
 function rAll(){rO();if(curTab==='customers')renderC();if(curTab==='alerts')rA();}
